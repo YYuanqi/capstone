@@ -2,5 +2,9 @@
 //= require jquery
 //= require bootstrap
 //= require angular
-//= rquire angular-ui-router
+//= require angular-ui-router
 //= require angular-resource
+
+//= require spa/app.module
+//= require spa/app.constant
+//= require spa/app.router
