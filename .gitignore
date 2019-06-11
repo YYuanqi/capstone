@@ -21,3 +21,7 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+/client/build
+/bower_components
+/node_modules
