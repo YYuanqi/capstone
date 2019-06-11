@@ -12,6 +12,11 @@ gem 'rack-cors', '~>1.0.3', :require => 'rack/cors'
 gem 'pry-rails'
 gem 'jbuilder', '~>2.9'
 
+gem 'sass-rails', '~>5.0'
+gem 'uglifier', '~>4.1'
+gem 'coffee-rails', '~>4.1', '>=4.1.0'
+gem 'jquery-rails', '~>4.2', '>=4.2.1'
+
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'pry-byebug'
@@ -26,3 +31,11 @@ group :development do
 end
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+source 'https://rails-assets.org' do
+  gem 'rails-assets-bootstrap', '~>4.3'
+  gem 'rails-assets-angular', '~>1.5', '>=1.5.8'
+  gem 'rails-assets-angular-ui-router', '~>0.3', '>=0.3.1'
+  gem 'rails-assets-angular-resource', '~>1.5', '>=1.5.8'
+end
+
