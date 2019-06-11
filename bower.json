@@ -1,0 +1,25 @@
+{
+  "name": "capstone",
+  "description": "Capstone Application",
+  "main": "index.js",
+  "authors": [
+    "yuanqi <gzcyyq@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/YYuanqi/capstone",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.4.1",
+    "bootstrap-sass": "^3.4.1",
+    "angular": "^1.7.8",
+    "angular-ui-router": "^1.0.22",
+    "angular-resource": "^1.7.8",
+    "jquery2": "^2.0.0"
+  }
+}
