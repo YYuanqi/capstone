@@ -17,11 +17,22 @@ gem 'uglifier', '~>4.1'
 gem 'coffee-rails', '~>4.1', '>=4.1.0'
 gem 'jquery-rails', '~>4.2', '>=4.2.1'
 
+gem 'database_cleaner'
+gem 'factory_girl_rails'
+gem 'faker'
+
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'pry-byebug'
   gem 'rspec-rails', '~> 3.6'
   gem 'httparty', '~>0.17', '>=0.17.0'
+
+  gem 'mongoid-rspec', '~> 4.0.0'
+  gem 'capybara', '~> 2.10.1'
+  gem 'poltergeist', '~> 1.11.0'
+  gem 'selenium-webdriver', '~> 2.53.4'
+  gem 'chromedriver-helper', '~>1.0.0'
+  gem 'launchy', '~>2.4.3'
 end
 
 group :development do
