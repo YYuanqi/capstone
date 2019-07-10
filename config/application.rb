@@ -35,5 +35,17 @@ module Capstone
     Mongoid.load!('./config/mongoid.yml')
     config.generators {|g| g.orm :active_record }
     #config.generators {|g| g.orm :mongoid }
+    
+    config.generators do |g|
+      g.test_framework :rspec,
+        :model_specs => true,
+        :routing_specs => false,
+        :controller_specs => false,
+        :helper_specs => false,
+        :view_specs => false,
+        :request_specs => true,
+        :policy_specs => false,
+        :feature_specs => true
+    end
   end
 end
