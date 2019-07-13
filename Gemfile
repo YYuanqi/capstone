@@ -15,8 +15,8 @@ gem 'uglifier', '~>4.1'
 gem 'coffee-rails', '~>4.1', '>=4.1.0'
 gem 'jquery-rails', '~>4.2', '>=4.2.1'
 
-gem 'database_cleaner'
-gem 'factory_girl_rails'
+gem 'database_cleaner', '~>1.5', '>=1.5.3'
+gem 'factory_bot_rails'
 gem 'faker'
 
 group :development, :test do
