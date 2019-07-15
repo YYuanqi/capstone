@@ -1,8 +1,13 @@
 module ApiHelper
-  ["post"].each do |http_method_name|
+  ["post", "get"].each do |http_method_name|
     define_method("j#{http_method_name}") do |path, params = {}, headers = {}|
-      headers = headers.merge("content-type" => 'application/json') if !params.empty?
-      self.send(http_method_name, path, params: params.to_json, headers: headers)
+      if ["post"].include? http_method_name
+        headers = headers.merge("content-type" => 'application/json') if !params.empty?
+        params = params.to_json
+      end
+      self.send(http_method_name, path,
+                params: params,
+                headers: headers.merge(access_tokens))
     end
   end
 
@@ -24,5 +29,16 @@ module ApiHelper
     jpost user_session_path, credentials.slice(:email, :password)
     expect(response).to have_http_status(status)
     return response.ok? ? parsed_body["data"] : parsed_body
+  end
+
+  def access_tokens
+    if access_tokens?
+      @last_tokens = ["uid", "client", "token-type", "access-token"].inject({}) {|h, k| h[k] = response.headers[k]; h}
+    end
+    @last_tokens || {}
+  end
+
+  def access_tokens?
+    !response.headers["access-token"].nil? if response
   end
 end

@@ -53,13 +53,11 @@ RSpec.describe "Authentication Apis", type: :request do
     context "anonyous user" do
       it "accesses unprotected" do
         get authn_whoami_path
-        pp parsed_body
         expect(response).to have_http_status(:ok)
         expect(parsed_body).to eq({})
       end
       it "fails to access protected resource" do
         get authn_checkme_path
-        pp parsed_body
         expect(response).to have_http_status(:unauthorized)
 
         expect(parsed_body).to include("errors" => ["You need to sign in or sign up before continuing."])
@@ -77,8 +75,21 @@ RSpec.describe "Authentication Apis", type: :request do
           expect(response_headers).to include("client")
           expect(response_headers).to include("token-type" => "Bearer")
         end
-        it "grants access to resource"
-        it "grants access to resource multiple times"
+        it "grants access to resource" do
+          jget authn_checkme_path
+          pp parsed_body
+          expect(response).to have_http_status(:ok)
+
+          payload = parsed_body
+          expect(payload).to include("id" => account[:id])
+          expect(payload).to include("uid" => account[:uid])
+        end
+        it "grants access to resource multiple times" do
+          (1..10).each do |idx|
+            jget authn_checkme_path
+            expect(response).to have_http_status(:ok)
+          end
+        end
         it "logout"
       end
 
