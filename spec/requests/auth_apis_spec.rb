@@ -9,7 +9,7 @@ RSpec.describe "Authentication Apis", type: :request do
       it "successfully creates account" do
         signup user_props
 
-        payload = parsed_body
+        pp payload = parsed_body
         expect(payload).to include("status" => "success")
         expect(payload).to include("data")
         expect(payload["data"]).to include('id')
@@ -38,7 +38,16 @@ RSpec.describe "Authentication Apis", type: :request do
     end
 
     context "non-unique information" do
-      it "reports non-unique e-mail"
+      it "reports non-unique e-mail" do
+        signup user_props, :ok
+        signup user_props, :unprocessable_entity
+
+        pp payload = parsed_body
+        expect(payload).to include("status" => "error")
+        expect(payload).to include("errors")
+        expect(payload["errors"]).to include("full_messages")
+        expect(payload["errors"]["full_messages"]).to include(/Email/i)
+      end
     end
 
     context "anonyous user" do
