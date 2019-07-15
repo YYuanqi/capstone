@@ -77,7 +77,6 @@ RSpec.describe "Authentication Apis", type: :request do
         end
         it "grants access to resource" do
           jget authn_checkme_path
-          pp parsed_body
           expect(response).to have_http_status(:ok)
 
           payload = parsed_body
@@ -90,7 +89,11 @@ RSpec.describe "Authentication Apis", type: :request do
             expect(response).to have_http_status(:ok)
           end
         end
-        it "logout"
+        it "logout" do
+          logout :ok
+          jget authn_checkme_path
+          expect(response).to have_http_status(:unauthorized)
+        end
       end
 
       context "invalid password" do

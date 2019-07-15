@@ -1,7 +1,7 @@
 module ApiHelper
-  ["post", "get"].each do |http_method_name|
+  ["post", "get", "delete"].each do |http_method_name|
     define_method("j#{http_method_name}") do |path, params = {}, headers = {}|
-      if ["post"].include? http_method_name
+      if ["post", "delete"].include? http_method_name
         headers = headers.merge("content-type" => 'application/json') if !params.empty?
         params = params.to_json
       end
@@ -29,6 +29,12 @@ module ApiHelper
     jpost user_session_path, credentials.slice(:email, :password)
     expect(response).to have_http_status(status)
     return response.ok? ? parsed_body["data"] : parsed_body
+  end
+
+  def logout status = :ok
+    jdelete destroy_user_session_path
+    @last_tokens = {}
+    expect(response).to have_http_status(status)
   end
 
   def access_tokens
