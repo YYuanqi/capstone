@@ -97,7 +97,12 @@ RSpec.describe "Authentication Apis", type: :request do
       end
 
       context "invalid password" do
-        it "rejects credentials"
+        it "rejects credentials" do
+          login account.merge(:password => "badpassword"), :unauthorized
+          payload = parsed_body
+          expect(payload).to include("errors")
+          expect(payload["errors"]).to include(/Invalid/i)
+        end
       end
     end
   end
