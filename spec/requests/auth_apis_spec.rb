@@ -9,7 +9,7 @@ RSpec.describe "Authentication Apis", type: :request do
       it "successfully creates account" do
         signup user_props
 
-        pp payload = parsed_body
+        payload = parsed_body
         expect(payload).to include("status" => "success")
         expect(payload).to include("data")
         expect(payload["data"]).to include('id')
@@ -23,7 +23,17 @@ RSpec.describe "Authentication Apis", type: :request do
 
     context "invalid registration" do
       context "missing information" do
-        it "reports error with messages"
+        it "reports error with messages" do
+          signup user_props.except(:email), :unprocessable_entity
+
+          pp payload = parsed_body
+          expect(payload).to include("status" => "error")
+          expect(payload).to include("data")
+          expect(payload["data"]).to include("email" => nil)
+          expect(payload).to include("errors")
+          expect(payload["errors"]).to include("full_messages")
+          expect(payload["errors"]["full_messages"]).to include(/Email/i)
+        end
       end
     end
 
