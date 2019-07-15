@@ -1,9 +1,24 @@
 require 'rails_helper'
 
 RSpec.describe "Authentication Apis", type: :request do
+  include_context "db_cleanup_each", :transaction
+  let(:user_props) { FactoryBot.attributes_for(:user) }
+
   context "sign-up" do
     context "valid registration" do
-      it "successfully creates account"
+      it "successfully creates account" do
+        signup user_props
+
+        pp payload = parsed_body
+        expect(payload).to include("status" => "success")
+        expect(payload).to include("data")
+        expect(payload["data"]).to include('id')
+        expect(payload["data"]).to include("provider" => "email")
+        expect(payload["data"]).to include("uid" => user_props[:email])
+        expect(payload["data"]).to include("name" => user_props[:name])
+        expect(payload["data"]).to include("email" =>user_props[:email])
+        expect(payload["data"]).to include("created_at", "updated_at")
+      end
     end
 
     context "invalid registration" do
