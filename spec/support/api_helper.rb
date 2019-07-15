@@ -10,7 +10,7 @@ module ApiHelper
     JSON.parse(response.body)
   end
 
-  def sigup registration, status = :ok
+  def signup registration, status = :ok
     jpost user_registration_path, registration
     expect(response).to have_http_status(status)
   end
