@@ -9,7 +9,7 @@ RSpec.describe "Authentication Apis", type: :request do
       it "successfully creates account" do
         signup user_props
 
-        pp payload = parsed_body
+        payload = parsed_body
         expect(payload).to include("status" => "success")
         expect(payload).to include("data")
         expect(payload["data"]).to include('id')
@@ -26,7 +26,7 @@ RSpec.describe "Authentication Apis", type: :request do
         it "reports error with messages" do
           signup user_props.except(:email), :unprocessable_entity
 
-          pp payload = parsed_body
+          payload = parsed_body
           expect(payload).to include("status" => "error")
           expect(payload).to include("data")
           expect(payload["data"]).to include("email" => nil)
@@ -42,7 +42,7 @@ RSpec.describe "Authentication Apis", type: :request do
         signup user_props, :ok
         signup user_props, :unprocessable_entity
 
-        pp payload = parsed_body
+        payload = parsed_body
         expect(payload).to include("status" => "error")
         expect(payload).to include("errors")
         expect(payload["errors"]).to include("full_messages")
@@ -67,8 +67,16 @@ RSpec.describe "Authentication Apis", type: :request do
     end
 
     context "login" do
+      let(:account) { signup user_props, :ok }
+      let!(:user) { login account, :ok }
       context "valid user login" do
-        it "generates access token"
+        it "generates access token" do
+          response_headers = response.headers.to_h
+          expect(response_headers).to include("uid" => account[:uid])
+          expect(response_headers).to include("access-token")
+          expect(response_headers).to include("client")
+          expect(response_headers).to include("token-type" => "Bearer")
+        end
         it "grants access to resource"
         it "grants access to resource multiple times"
         it "logout"
