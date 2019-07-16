@@ -48,3 +48,5 @@ module ApiHelper
     !response.headers["access-token"].nil? if response
   end
 end
+
+Rspec.shared_examples "show resource" 
