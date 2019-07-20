@@ -1,7 +1,7 @@
 module ApiHelper
   %w[head get post put patch delete].each do |http_method_name|
     define_method("j#{http_method_name}") do |path, params = {}, headers = {}|
-      if %w[post delete put patch].include? http_method_name
+      if %w[post put patch].include? http_method_name
         headers = headers.merge('content-type' => 'application/json') unless params.empty?
         params = params.to_json
       end
@@ -35,7 +35,7 @@ module ApiHelper
   def logout(status = :ok)
     jdelete destroy_user_session_path
     @last_tokens = {}
-    expect(response).to have_http_status(status)
+    expect(response).to have_http_status(status) if status
   end
 
   def access_tokens
