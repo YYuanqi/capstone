@@ -1,5 +1,7 @@
 class ImagesController < ApplicationController
-  before_action :set_image, only: [:show, :update, :destroy]
+  before_action :set_image, only: %i[show update destroy]
+  wrap_parameters :image, include: ["caption"]
+  before_action :authenticate_user!, only: [:create, :update, :destory]
 
   # GET /images
   # GET /images.json
@@ -9,13 +11,13 @@ class ImagesController < ApplicationController
 
   # GET /images/1
   # GET /images/1.json
-  def show
-  end
+  def show; end
 
   # POST /images
   # POST /images.json
   def create
     @image = Image.new(image_params)
+    @image.creator_id = current_user.id
 
     if @image.save
       render :show, status: :created, location: @image
@@ -28,7 +30,7 @@ class ImagesController < ApplicationController
   # PATCH/PUT /images/1.json
   def update
     if @image.update(image_params)
-      render :show, status: :ok, location: @image
+      head :no_content
     else
       render json: @image.errors, status: :unprocessable_entity
     end
@@ -41,13 +43,14 @@ class ImagesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_image
-      @image = Image.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def image_params
-      params.fetch(:image, {})
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_image
+    @image = Image.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def image_params
+    params.require(:image).permit(:caption, :creator_id)
+  end
 end

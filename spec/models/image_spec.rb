@@ -1,5 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe Image, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  include_context 'db_cleanup'
+
+  context 'build valid image' do
+    it 'default image created with random caption' do
+      image = FactoryBot.build(:image)
+      expect(image.creator_id).to_not be_nil
+      expect(image.save).to be true
+    end
+
+    it 'image with User and non-nil caption' do
+      user = FactoryBot.create(:user)
+      image = FactoryBot.build(:image, :with_caption, creator_id: user.id)
+      expect(image.creator_id).to eq(user.id)
+      expect(image.caption).to_not be_nil
+      expect(image.save).to be true
+    end
+  end
 end
