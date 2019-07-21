@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_21_043512) do
+ActiveRecord::Schema.define(version: 2019_07_21_103437) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,18 @@ ActiveRecord::Schema.define(version: 2019_07_21_043512) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["creator_id"], name: "index_images_on_creator_id"
+  end
+
+  create_table "thing_images", force: :cascade do |t|
+    t.bigint "image_id", null: false
+    t.bigint "thing_id", null: false
+    t.integer "priority", default: 5, null: false
+    t.integer "creator_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["image_id", "thing_id"], name: "index_thing_images_on_image_id_and_thing_id", unique: true
+    t.index ["image_id"], name: "index_thing_images_on_image_id"
+    t.index ["thing_id"], name: "index_thing_images_on_thing_id"
   end
 
   create_table "things", force: :cascade do |t|
@@ -68,4 +80,6 @@ ActiveRecord::Schema.define(version: 2019_07_21_043512) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "thing_images", "images"
+  add_foreign_key "thing_images", "things"
 end
