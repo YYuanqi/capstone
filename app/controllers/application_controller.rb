@@ -3,21 +3,28 @@ class ApplicationController < ActionController::API
 
   before_action :configure_permitted_parameters, if: :devise_controller?
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+  rescue_from ActionController::ParameterMissing, with: :missing_parameter
 
-  def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
-  end
+  protected
 
-  def record_not_found(exception)
-    full_message_error "can not find id[#{params[:id]}]", :not_found
-    Rails.logger.debug exception.message
-  end
+    def configure_permitted_parameters
+      devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
+    end
 
-  def full_message_error full_message, status
-    payload = {
-        errors: { full_message: full_message }
-    }
+    def record_not_found(exception)
+      full_message_error "can not find id[#{params[:id]}]", :not_found
+      Rails.logger.debug exception.message
+    end
 
-    render :json => payload, :status => status
-  end
+    def full_message_error full_message, status
+      payload = {
+          errors: { full_message: full_message }
+      }
+      render :json => payload, :status => status
+    end
+
+    def missing_parameter(exception)
+      full_message_error exception.message, :bad_request
+      Rails.logger.debug exception.message
+    end
 end
