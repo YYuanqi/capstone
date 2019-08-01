@@ -48,6 +48,12 @@ module ApiHelper
   def access_tokens?
     !response.headers['access-token'].nil? if response
   end
+
+  def create_resource path, factory, status = :created
+    jpost path, FactoryBot.attributes_for(factory)
+    expect(response).to have_http_status(status) if status
+    parsed_body
+  end
 end
 
 RSpec.shared_examples 'show resource' do |model|
