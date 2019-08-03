@@ -18,7 +18,7 @@ class ApplicationController < ActionController::API
 
     def full_message_error full_message, status
       payload = {
-          errors: { full_message: full_message }
+          errors: { full_messages: full_message }
       }
       render :json => payload, :status => status
     end
