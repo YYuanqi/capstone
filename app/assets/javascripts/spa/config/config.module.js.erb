@@ -2,8 +2,8 @@
 	"use strict";
 
 	angular
-		.module("spa")
-		.constant("spa.APP_CONFIG", {
+		.module("spa.config", [])
+		.constant("spa.config.APP_CONFIG", {
 			server_url: "<%= ENV['RAILS_API_URL'] %>",
 			main_page_html: "<%= asset_path('spa/pages/main.html') %>",
 			cities_html: "<%= asset_path('spa/cities/cities.html') %>"
