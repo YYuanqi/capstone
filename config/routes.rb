@@ -14,5 +14,7 @@ Rails.application.routes.draw do
       resources :thing_images, only: [:index, :create, :update, :destroy]
     end
   end
+  get '/ui' => 'ui#index'
+  get '/ui#' => 'ui#index'
   root "ui#index"
 end

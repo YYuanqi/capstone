@@ -8,13 +8,16 @@
 //= require ng-token-auth
 
 //= require spa/app.module
-//= require spa/config/config.module.js.erb
 //= require spa/app.router
+
+//= require spa/config/config.module
+
+//= require spa/authn/authn.module.js
+//= require spa/authn/authn.config
 
 //= require spa/cities/cities.module
 //= require spa/cities/cities.service
 //= require spa/cities/cities.controller
 //= require spa/cities/cities.directive
 
-//= require spa/authn/authn.module.js
-//= require spa/authn/authn.config
+

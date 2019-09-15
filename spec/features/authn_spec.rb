@@ -1,13 +1,33 @@
 require 'rails_helper'
 
-RSpec.feature "Authns", type: :feature, :js=>true do
+RSpec.feature "Authns", type: :feature, :js => true do
 
   feature "sign-up" do
-    context "valid registration" do
-      scenario "creates account and navigates away from signup page"
+    include_context "db_cleanup_each"
+    let(:user_props) {FactoryBot.attributes_for(:user)}
+
+    feature "sign up" do
+      context "valid user_props" do
+        scenario "creates account and navigates away from signup page" do
+          start_time = Time.now
+          visit "#{ui_path}/#/singup" unless page.has_css?("#signup-form")
+          expect(page).to have_css("#signup-form")
+
+          fill_in("signup-eamil", with: user_props[:email])
+          fill_in("signup-name", with: user_props[:name])
+          fill_in("signup-password", with: user_props[:password])
+          fill_in("signup-password-confirmation", with: user_props[:password])
+          click_on("Sign Up")
+          expect(page).to have_no_button("Sign Up")
+
+          expect(page).to have_no_css("#signup-form")
+          user = User.where(email: user_props[:eamil]).first
+          expect(user.create).to be > start_time
+        end
+      end
     end
 
-    context "rejected registration" do
+    context "rejected user_props" do
       scenario "account not created and stays on page"
       scenario "displays error messages"
     end
