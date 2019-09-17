@@ -4,9 +4,10 @@
 	angular
 		.module("spa.config", [])
 		.constant("spa.config.APP_CONFIG", {
-			server_url: "<%= ENV['RAILS_API_URL'] %>",
+      server_url: "<%= ENV['RAILS_API_URL'] %>",
 			main_page_html: "<%= asset_path('spa/pages/main.html') %>",
-      signup_page_html: "<%= asset_path('spa-demo/pages/signup_page.html') %>",
+      signup_page_html: "<%= asset_path('spa/pages/signup_page.html') %>",
+      authn_signup_html: "<%= asset_path('spa/authn/signup/signup.html') %>",
 			cities_html: "<%= asset_path('spa/cities/cities.html') %>"
 		});
 

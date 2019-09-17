@@ -8,7 +8,7 @@
   AuthnConfig.$inject = ["$authProvider", "spa.config.APP_CONFIG"];
   function AuthnConfig($authProvider, APP_CONFIG) {
     $authProvider.configure({
-      apiUrl: APP_CONFIG.sever_url
+      apiUrl: APP_CONFIG.server_url
     });
   }
 

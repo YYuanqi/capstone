@@ -14,10 +14,10 @@
 
 //= require spa/authn/authn.module.js
 //= require spa/authn/authn.config
+//= require spa/authn/authn.service.js
+//= require spa/authn/signup.component.js
 
 //= require spa/cities/cities.module
 //= require spa/cities/cities.service
 //= require spa/cities/cities.controller
 //= require spa/cities/cities.directive
-
-
