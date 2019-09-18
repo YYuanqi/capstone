@@ -8,7 +8,13 @@ Capybara.register_driver :selenium do |app|
   Capybara::Selenium::Driver.new(app, browser: browser)
 end
 
-require 'capybara/poltergeist' do |app|
+require 'capybara/poltergeist'
+Capybara.configure do |config|
+  config.default_driver = :rack_test
+  config.javascript_driver = :poltergeist
+end
+
+Capybara.register_driver :poltergeist do |app|
   Capybara::Poltergeist::Driver.new(app, phantomjs_logger: StringIO.new)
 end
 
