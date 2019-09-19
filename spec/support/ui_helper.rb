@@ -1,12 +1,12 @@
 module UiHelper
-  def signup user_props, sucess: true
+  def signup registration, sucess: true
     visit "#{ui_path}/#/signup" unless page.has_css?("#signup-form")
     expect(page).to have_css("#signup-form")
 
-    fill_in("signup-email", with: user_props[:email])
-    fill_in("signup-name", with: user_props[:name])
-    fill_in("signup-password", with: user_props[:password])
-    fill_in("signup-password_confirmation", with: user_props[:password])
+    fill_in("signup-email", with: registration[:email])
+    fill_in("signup-name", with: registration[:name])
+    fill_in("signup-password", with: registration[:password])
+    fill_in("signup-password_confirmation", with: registration[:password])
     click_on("Sign Up")
     sleep(3.seconds)
 
