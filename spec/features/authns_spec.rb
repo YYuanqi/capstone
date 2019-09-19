@@ -20,7 +20,7 @@ RSpec.feature "Authns", type: :feature, :js => true do
           click_on("Sign Up")
           sleep(3.seconds)
 
-          expect(page).to have_button("Sign Up")
+          expect(page).to have_no_button("Sign Up")
           expect(page).to have_no_css("#signup-form")
           user = User.where(email: user_props[:email]).first
           expect(user.created_at).to be > start_time
