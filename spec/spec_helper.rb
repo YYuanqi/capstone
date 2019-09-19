@@ -2,6 +2,7 @@ require 'mongoid-rspec'
 require 'capybara/rspec'
 require_relative 'support/database_cleaners.rb'
 require_relative 'support/api_helper.rb'
+require_relative 'support/ui_helper.rb'
 
 browser = :chrome
 Capybara.register_driver :selenium do |app|
@@ -19,7 +20,9 @@ Capybara.register_driver :poltergeist do |app|
 end
 
 RSpec.configure do |config|
+  #include helper files
   config.include ApiHelper, type: :request
+  config.include UiHelper, type: :feature
 
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true

@@ -10,25 +10,20 @@ RSpec.feature "Authns", type: :feature, :js => true do
       context "valid user_props" do
         scenario "creates account and navigates away from signup page" do
           start_time = Time.now
-          visit "#{ui_path}/#/signup" unless page.has_css?("#signup-form")
-          expect(page).to have_css("#signup-form")
+          signup user_props
 
-          fill_in("signup-email", with: user_props[:email])
-          fill_in("signup-name", with: user_props[:name])
-          fill_in("signup-password", with: user_props[:password])
-          fill_in("signup-password_confirmation", with: user_props[:password])
-          click_on("Sign Up")
-          sleep(3.seconds)
-
-          expect(page).to have_no_button("Sign Up")
-          expect(page).to have_no_css("#signup-form")
           user = User.where(email: user_props[:email]).first
+          expect(page).to have_no_css("#signup-form")
           expect(user.created_at).to be > start_time
         end
       end
     end
 
     context "rejected user_props" do
+      before(:each) do
+        signup user_props
+        expect(page).to have_no_css("signup-form")
+      end
       scenario "account not created and stays on page"
       scenario "displays error messages"
     end
