@@ -6,7 +6,8 @@ module UiHelper
     fill_in("signup-email", with: registration[:email])
     fill_in("signup-name", with: registration[:name])
     fill_in("signup-password", with: registration[:password])
-    fill_in("signup-password_confirmation", with: registration[:password])
+    registration[:password_confirmation] ||= registration[:password]
+    fill_in("signup-password_confirmation", with: registration[:password_confirmation])
     click_on("Sign Up")
     sleep(3.seconds)
 
