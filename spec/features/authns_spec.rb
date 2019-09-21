@@ -6,38 +6,59 @@ RSpec.feature "Authns", type: :feature, :js => true do
     include_context "db_cleanup_each"
     let(:user_props) {FactoryBot.attributes_for(:user)}
 
-      context "valid user_props" do
-        scenario "creates account and navigates away from signup page" do
-          start_time = Time.now
-          signup user_props
+    context "valid user_props" do
+      scenario "creates account and navigates away from signup page" do
+        start_time = Time.now
+        signup user_props
 
-          user = User.where(email: user_props[:email]).first
-          expect(page).to have_no_css("#signup-form")
-          expect(user.created_at).to be > start_time
+        user = User.where(email: user_props[:email]).first
+        expect(page).to have_no_css("#signup-form")
+        expect(user.created_at).to be > start_time
+      end
+    end
+
+    context "rejected user_props" do
+      before(:each) do
+        signup user_props
+        expect(page).to have_no_css("#signup-form")
+      end
+
+      scenario "account not created and stays on page" do
+        dup_user = FactoryBot.attributes_for(:user, email: user_props[:email])
+        signup dup_user, success: false
+
+        expect(page).to have_css("#signup-form")
+        expect(User.where(email: user_props[:email], name: user_props[:name])).to exist
+        expect(User.where(email: dup_user[:email], name: dup_user[:name])).to_not exist
+      end
+
+      scenario "displays error messages" do
+        bad_props = FactoryBot.attributes_for(:user, email: user_props[:email], password: "123")
+                        .merge(password_confirmation: "abc")
+
+        signup bad_props, success: false
+
+        expect(page).to have_css("#signup-form > span.invalid",
+                                 text: "Password confirmation doesn't match Password")
+        expect(page).to have_css("#signup-form > span.invalid",
+                                 text: "Password is too short")
+        expect(page).to have_css("#signup-form > span.invalid",
+                                 text: "Email has already been taken")
+        expect(page).to have_css("#signup-email span.invalid",
+                                 text: "has already been taken")
+        expect(page).to have_css("#signup-password span.invalid", text: "too short")
+
+        within("#signup-password_confirmation") do
+          expect(page).to have_css("span.invalid", text: "doesn't match")
         end
       end
 
-      context "rejected user_props" do
-        before(:each) do
-          signup user_props
-          expect(page).to have_no_css("#signup-form")
-        end
+    end
 
-        scenario "account not created and stays on page" do
-          dup_user = FactoryBot.attributes_for(:user, email: user_props[:email])
-          signup dup_user, sucess: false
-
-          expect(page).to have_css("#signup-form")
-          expect(User.where(email: user_props[:email], name: user_props[:name])).to exist
-          expect(User.where(email: dup_user[:email], name: dup_user[:name])).to_not exist
-        end
-        scenario "displays error messages"
-      end
-
-      context "invalid field" do
-        scenario "bad email"
-        scenario "missing password"
-      end
+    context "invalid field" do
+      scenario "bad email"
+      scenario "missing password"
+    end
   end
 
   feature "anonymous user" do

@@ -1,5 +1,5 @@
 module UiHelper
-  def signup registration, sucess: true
+  def signup registration, success: true
     visit "#{ui_path}/#/signup" unless page.has_css?("#signup-form")
     expect(page).to have_css("#signup-form")
 
@@ -11,7 +11,7 @@ module UiHelper
     click_on("Sign Up")
     sleep(3.seconds)
 
-    if sucess
+    if success
       expect(page).to have_no_button("Sign Up")
     else
       expect(page).to have_button("Sign Up")
