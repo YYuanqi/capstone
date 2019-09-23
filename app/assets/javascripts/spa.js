@@ -12,10 +12,12 @@
 
 //= require spa/config/config.module
 
-//= require spa/authn/authn.module.js
+//= require spa/authn/authn.module
 //= require spa/authn/authn.config
-//= require spa/authn/authn.service.js
-//= require spa/authn/signup.component.js
+//= require spa/authn/authn.service
+//= require spa/authn/signup.component
+
+//= require spa/layout/layout.module
 
 //= require spa/cities/cities.module
 //= require spa/cities/cities.service
