@@ -70,29 +70,42 @@ RSpec.feature "Authns", type: :feature, :js => true do
     end
 
     context "invalid field" do
-      scenario "bad email"
-      scenario "missing password"
-    end
-  end
-
-  feature "anonymous user" do
-    scenario "shown login form"
-  end
-
-  feature "login" do
-    context "valid user login" do
-      scenario "closes form and displays current user name"
-      scenario "menu shows logout option"
-      scenario "can access authenticated resources"
+      after(:each) do
+        with_in("#signup-form") do
+          expect(page).to have_button("Sign Up", disable: true)
+        end
+      end
     end
 
-    context "invalid login" do
-      scenario "error message displayed and leaves user unauthenticated"
+    scenario "bad email" do
+      fillin_signup FactoryBot.attributes_for(:user, email: 'illegal_email')
+      expect(page).to have_css("input[name='signup-email'].ng-invalid-email")
+    end
+    scenario "missing password" do
+      fillin_signup FactoryBot.attributes_for(:user, password: nil)
+      expect(page).to have_css("input[name='signup-password'].ng-invalid-required")
+      expect(page).to have_css("input[name='signup-password_confirmation'].ng-invalid-required")
     end
   end
+end
 
-  feature "logout" do
-    scenario "closes form and removes user name"
-    scenario "can no longer access authenticated resources"
+feature "anonymous user" do
+  scenario "shown login form"
+end
+
+feature "login" do
+  context "valid user login" do
+    scenario "closes form and displays current user name"
+    scenario "menu shows logout option"
+    scenario "can access authenticated resources"
   end
+
+  context "invalid login" do
+    scenario "error message displayed and leaves user unauthenticated"
+  end
+end
+
+feature "logout" do
+  scenario "closes form and removes user name"
+  scenario "can no longer access authenticated resources"
 end
