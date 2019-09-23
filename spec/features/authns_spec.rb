@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.feature "Authns", type: :feature, :js => true do
-
   feature "sign-up" do
     include_context "db_cleanup_each"
     let(:user_props) {FactoryBot.attributes_for(:user)}
@@ -51,6 +50,21 @@ RSpec.feature "Authns", type: :feature, :js => true do
         within("#signup-password_confirmation") do
           expect(page).to have_css("span.invalid", text: "doesn't match")
         end
+      end
+
+      scenario "clears error message on page update" do
+        bad_props = FactoryBot.attributes_for(:user, email: user_props[:email], password: user_props[:password])
+                        .merge(password_confirmation: "abc")
+        signup bad_props, success: false
+        expect(page).to have_css("#signup-email span.invalid")
+        expect(page).to have_css("#signup-password > span.invalid")
+        expect(page).to have_css("#signup-password_confirmation > span.invalid")
+
+        fill_in("signup-email", with: "anylegal@email.com")
+
+        expect(page).to have_no_css("#signup-email span.invalid")
+        expect(page).to have_no_css("#signup-password > span.invalid")
+        expect(page).to have_no_css("#signup-password_confirm > span.invalid")
       end
 
     end
