@@ -43,7 +43,7 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 source 'https://rails-assets.org' do
-  gem 'rails-assets-bootstrap', '~>4.3'
+  gem 'rails-assets-bootstrap', '~>3.3', '>= 3.3.7'
   gem 'rails-assets-angular', '~>1.5.9'
   gem 'rails-assets-angular-ui-router', '~>0.3', '>=0.3.1'
   gem 'rails-assets-angular-resource', '~>1.5.9'
