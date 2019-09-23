@@ -9,9 +9,10 @@
     });
 
   templateUrl.$inject = ["spa.config.APP_CONFIG"];
+
   function templateUrl(APP_CONFIG) {
     return APP_CONFIG.authn_signup_html;
-  }
+  };
 
   SignupController.$inject = ["$scope", "$state", "spa.authn.Authn"];
 
@@ -41,5 +42,4 @@
       )
     }
   }
-
 })();
