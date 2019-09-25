@@ -136,11 +136,7 @@ RSpec.feature "Authns", type: :feature, :js => true do
       expect(page).to have_css(*user_name_criteria)
       expect(page).to have_css(*user_id_criteria)
 
-      find("#navbar-loginlabel").click
-      find_button("Logout").click
-
-      expect(page).to have_no_css("#login-form")
-      expect(page).to have_no_css("#logout-form")
+      logout
 
       expect(page).to have_css(*login_criteria)
       expect(page).to have_no_css(*user_name_criteria)

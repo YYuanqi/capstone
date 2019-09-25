@@ -27,6 +27,21 @@ module UiHelper
     expect(page).to have_css("#navbar-loginlabel", text: /#{credentials[:name]}/)
   end
 
+  def logged_in? account = nil
+    account ?
+        page.has_css?("#navbar-loginlabel", text: /#{account[:name]}/) :
+        page.has_css?("#user_id", visible: false)
+  end
+
+  def logout
+    if logged_in?
+      find("#navbar-loginlabel").click
+      find_button("Logout").click
+
+      expect(page).to have_no_css("#user_id")
+    end
+  end
+
   def fillin_signup registration
     visit "#{ui_path}/#/signup" unless page.has_css?("#signup-form")
     using_wait_time 5 do
