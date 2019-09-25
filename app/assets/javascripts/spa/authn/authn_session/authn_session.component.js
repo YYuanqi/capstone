@@ -21,8 +21,8 @@
     var vm = this;
     vm.loginForm = {};
     vm.login = login;
-    vm.getCurrentuser = Authn.getCurrentUser;
-    vm.getCurrentuserName = Authn.getCurrentUserName;
+    vm.getCurrentUser = Authn.getCurrentUser;
+    vm.getCurrentUserName = Authn.getCurrentUserName;
 
     vm.$onInit = function () {
       console.log("AuthnSessionController", $scope);
