@@ -16,8 +16,18 @@
     service.getCurrentUser = getCurrentUser;
     service.login = login;
     service.logout = logout;
+
+    activate();
     return;
 
+    function activate() {
+      $auth.validateUser().then(
+        function(response) {
+          service.user = response;
+          console.log("validated user", response);
+        }
+      )
+    }
     function signup(registration) {
       return $auth.submitRegistration(registration, '/auth');
     }
