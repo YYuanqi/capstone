@@ -97,6 +97,13 @@ RSpec.feature "Authns", type: :feature, :js => true do
     end
   end
 
+  def checkme
+    visit root_path + "#/authn"
+    within("div#authn-check") do
+      click_button("checkme() says...")
+    end
+  end
+
   feature "login" do
     background(:each) do
       signup user_props
@@ -113,7 +120,13 @@ RSpec.feature "Authns", type: :feature, :js => true do
         expect(page).to have_css("#user_id", text: /.+/, visible: false)
         expect(page).to have_css("#logout-identity label", text: user_props[:name])
       end
-      scenario "can access authenticated resources"
+      scenario "can access authenticated resources" do
+        checkme
+        within("div.checkme-user") do
+          expect(pate).to have_css("label", text: /#{user_props[:name]}/)
+          expect(pate).to have_css("label", text: /#{user_props[:email]}/)
+        end
+      end
     end
 
     context "invalid login" do
@@ -156,6 +169,13 @@ RSpec.feature "Authns", type: :feature, :js => true do
       expect(page).to have_no_css(*user_id_criteria)
     end
 
-    scenario "can no longer access authenticated resources"
+    scenario "can no longer access authenticated resources" do
+      logout
+      checkme
+      within("div.checkme-user") do
+        expect(page).to have_no_css("label", text: /#{user_props[:name]}/)
+        expect(page).to have_css("label", text: /Authorized users only/)
+      end
+    end
   end
 end
