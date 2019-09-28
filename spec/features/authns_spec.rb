@@ -127,7 +127,7 @@ RSpec.feature "Authns", type: :feature, :js => true do
         expect(logged_in? user_props).to be false
         expect(page).to have_css('#login-form')
         within('div#login-submit') do
-          expect(page).to have_css("span.invalid", text: /Invalid Credentials/)
+          expect(page).to have_css("span.invalid", text: /Invalid credentials/)
         end
         expect(page).to have_css("#navbar-loginlabel", text: 'Login')
       end
