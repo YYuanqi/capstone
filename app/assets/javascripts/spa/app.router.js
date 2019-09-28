@@ -1,4 +1,4 @@
-(function() {
+(function () {
   "use strict";
 
   angular
@@ -6,8 +6,8 @@
     .config(RouterFunction);
 
   RouterFunction.$inject = ["$stateProvider",
-                            "$urlRouterProvider",
-                            "spa.config.APP_CONFIG"];
+    "$urlRouterProvider",
+    "spa.config.APP_CONFIG"];
 
   function RouterFunction($stateProvider, $urlRouterProvider, APP_CONFIG) {
     $stateProvider
@@ -20,8 +20,11 @@
       .state("accountSignup", {
         url: "/signup",
         templateUrl: APP_CONFIG.signup_page_html
+      })
+      .state("authn", {
+        url: "/authn",
+        templateUrl: APP_CONFIG.authn_page_html
       });
-
 
     $urlRouterProvider.otherwise("/");
   }

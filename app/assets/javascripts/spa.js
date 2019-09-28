@@ -15,8 +15,11 @@
 //= require spa/authn/authn.module
 //= require spa/authn/authn.config
 //= require spa/authn/authn.service
+//= require spa/authn/whoami.service
+//= require spa/authn/checkme.service
 //= require spa/authn/signup.component
 //= require spa/authn/authn_session/authn_session.component
+//= require spa/authn/authn_check/authn_check.directive
 
 //= require spa/layout/layout.module
 //= require spa/layout/navbar/navbar.component

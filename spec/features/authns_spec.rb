@@ -100,7 +100,7 @@ RSpec.feature "Authns", type: :feature, :js => true do
   def checkme
     visit root_path + "#/authn"
     within("div#authn-check") do
-      click_button("checkme() says...")
+      click_button("checkMe() says...")
     end
   end
 
@@ -123,8 +123,8 @@ RSpec.feature "Authns", type: :feature, :js => true do
       scenario "can access authenticated resources" do
         checkme
         within("div.checkme-user") do
-          expect(pate).to have_css("label", text: /#{user_props[:name]}/)
-          expect(pate).to have_css("label", text: /#{user_props[:email]}/)
+          expect(page).to have_css("label", text: /#{user_props[:name]}/)
+          expect(page).to have_css("label", text: /#{user_props[:email]}/)
         end
       end
     end
@@ -174,7 +174,7 @@ RSpec.feature "Authns", type: :feature, :js => true do
       checkme
       within("div.checkme-user") do
         expect(page).to have_no_css("label", text: /#{user_props[:name]}/)
-        expect(page).to have_css("label", text: /Authorized users only/)
+        expect(page).to have_css("label", text: /You need to sign in or sign up before continuing/)
       end
     end
   end
