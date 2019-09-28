@@ -117,7 +117,20 @@ RSpec.feature "Authns", type: :feature, :js => true do
     end
 
     context "invalid login" do
-      scenario "error message displayed and leaves user unauthenticated"
+      background(:each) {logout}
+      scenario "error message displayed and leaves user unauthenticated" do
+        fillin_login user_props.merge(password: 'badpassword')
+        within('#login-form') do
+          click_button('Login')
+        end
+
+        expect(logged_in? user_props).to be false
+        expect(page).to have_css('#login-form')
+        within('div#login-submit') do
+          expect(page).to have_css("span.invalid", text: /Invalid Credentials/)
+        end
+        expect(page).to have_css("#navbar-loginlabel", text: 'Login')
+      end
     end
   end
 
