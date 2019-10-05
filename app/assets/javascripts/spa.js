@@ -24,6 +24,10 @@
 //= require spa/layout/layout.module
 //= require spa/layout/navbar/navbar.component
 
+//= require spa/subjects/subject.module
+//= require spa/subjects/images/images.service
+//= require spa/subjects/images/images.component
+
 //= require spa/cities/cities.module
 //= require spa/cities/cities.service
 //= require spa/cities/cities.controller
