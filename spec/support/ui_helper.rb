@@ -1,4 +1,10 @@
 module UiHelper
+  def create_user
+    user_props = FactoryBot.attributes_for(:user)
+    user = FactoryBot.create(:user)
+    user_props.merge(id: user.id, uid: user.uid)
+  end
+
   def signup registration, success: true
     fillin_signup registration
     click_on("Sign Up")
@@ -37,12 +43,12 @@ module UiHelper
   def logged_in? account = nil
     account ?
         page.has_css?("#navbar-loginlabel", text: /#{account[:name]}/) :
-        page.has_css?("#user_id", visible: false)
+        page.has_css?("#user_id", text: /.+/, visible: false)
   end
 
   def logout
     if logged_in?
-      find("#navbar-loginlabel").click
+      find("#navbar-loginlabel").click unless page.has_button?("Logout")
       find_button("Logout").click
 
       expect(page).to have_no_css("#user_id")
