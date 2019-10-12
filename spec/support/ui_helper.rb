@@ -1,7 +1,7 @@
 module UiHelper
   def create_user
     user_props = FactoryBot.attributes_for(:user)
-    user = FactoryBot.create(:user)
+    user = FactoryBot.create(:user, user_props)
     user_props.merge(id: user.id, uid: user.uid)
   end
 
