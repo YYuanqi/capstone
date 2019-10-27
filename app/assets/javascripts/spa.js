@@ -28,6 +28,9 @@
 //= require spa/subjects/images/images.service
 //= require spa/subjects/images/images.component
 //= require spa/subjects/images/images_authz.directive
+//= require spa/subjects/things/things.service
+//= require spa/subjects/things/things.component
+//= require spa/subjects/things/things_authz.directive
 
 //= require spa/cities/cities.module
 //= require spa/cities/cities.service
