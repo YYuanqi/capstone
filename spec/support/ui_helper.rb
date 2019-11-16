@@ -7,6 +7,7 @@ module UiHelper
 
   def signup registration, success: true
     fillin_signup registration
+    expect(page).to have_button("Sign Up", disabled: false) if success
     click_on("Sign Up")
     sleep(3.seconds)
 
@@ -32,9 +33,8 @@ module UiHelper
     within("#login-form") do
       click_button("Login")
     end
-    using_wait_time 5 do
-      expect(page).to have_no_css("#login-form")
-    end
+
+    expect(page).to have_no_css("#login-form", wait: 5)
 
     expect(page).to have_css("#logout-form", visible: false)
     expect(page).to have_css("#navbar-loginlabel", text: /#{credentials[:name]}/)
@@ -66,5 +66,12 @@ module UiHelper
     fill_in("signup-password", with: registration[:password])
     registration[:password_confirmation] ||= registration[:password]
     fill_in("signup-password_confirmation", with: registration[:password_confirmation])
+  end
+
+  def wait_until
+    Timeout.timeout(Capybara.default_max_wait_time) do
+      sleep(0.1) until value = yield
+      value
+    end
   end
 end

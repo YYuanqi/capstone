@@ -4,7 +4,7 @@ FactoryBot.define do
     creator_id { 1 }
 
     trait :with_caption do
-      caption { Faker::Lorem.sentence(1).chomp('.') }
+      caption { Faker::Lorem.sentence(3).chomp('.') }
     end
   end
 end
