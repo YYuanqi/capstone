@@ -17,7 +17,7 @@ module SubjectsUiHelper
                                wait: 5)
     end
 
-    if expected_linkables && logged_in?
+    if expected_linkables && logged_in? && false
       expect(page).to have_css(".link-things select option", count: expected_linkables)
     end
   end
@@ -57,6 +57,19 @@ module SubjectsUiHelper
         expect(page).to have_css(".thing-list")
         expect(page).to have_css(".thing-list li", count: things.count, wait: 5)
       end
+    end
+  end
+
+  def thing_editor_loaded! thing
+    #wait for page navigated to arrive, displaying expected
+    expect(page).to have_css("sd-thing-editor")
+    within("sd-thing-editor .thing-form") do
+      expect(page).to have_css("span.thing_id", :text => thing.id,
+                               :visible => false)
+      expect(page).to have_css("ul.thing-images li span.image_id",
+                               :visible => false,
+                               :count => ThingImage.where(:thing => thing).count,
+                               :wait => 5)
     end
   end
 end
