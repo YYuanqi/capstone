@@ -22,6 +22,20 @@ module SubjectsUiHelper
     end
   end
 
+  def visit_image image
+    unless page.has_css?('sd-image-editor .image-form span.image_id',
+                         text: image.id,
+                         visible: false)
+      visit "#{ui_path}/#/images/#{image.id}"
+    end
+    within('sd-image-editor .image-form') do
+      expect(page).to have_css('span.image_id',
+                               text: image.id,
+                               visible: false)
+      expect(page).to have_css('.image-controls')
+    end
+  end
+
   def displayed_caption(image)
     image.caption ? image.caption : "(no caption #{image.id}"
   end
@@ -46,4 +60,3 @@ module SubjectsUiHelper
     end
   end
 end
-
