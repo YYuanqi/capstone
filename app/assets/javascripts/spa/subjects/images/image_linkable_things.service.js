@@ -1,9 +1,9 @@
 (function () {
-  "use strict"
+  "use strict";
 
   angular
-    .module("spa-demo.subjects")
-    .factory("spa-demo.subjects.ImageLinkableThing", ImageLinkableThing);
+    .module("spa.subjects")
+    .factory("spa.subjects.ImageLinkableThing", ImageLinkableThing);
 
   ImageLinkableThing.$inject = ["$resource", "spa.config.APP_CONFIG"];
 

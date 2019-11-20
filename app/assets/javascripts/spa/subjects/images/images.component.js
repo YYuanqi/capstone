@@ -31,17 +31,16 @@
   }
 
   ImageSelectorController.$inject = ["$scope",
+    "$stateParams",
+    "spa.subjects.Image"];
+
+  ImageEditorController.$inject = ["$scope",
     "$q",
     "$state",
     "$stateParams",
     "spa.subjects.Image",
     "spa.subjects.ImageThing",
     "spa.subjects.ImageLinkableThing"];
-
-  ImageEditorController.$inject = ["$scope",
-    "$state",
-    "$stateParams",
-    "spa.subjects.Image"];
 
   function ImageSelectorController($scope, $stateParams, Image) {
     var vm = this;
@@ -65,7 +64,7 @@
     vm.$onInit = function () {
       console.log("ImageEditorController", $scope);
       if ($stateParams.id) {
-        vm.item = Image.get({id: $stateParams.id});
+        reload($stateParams.id);
       } else {
         newResource();
       }
@@ -78,26 +77,35 @@
       return vm.item;
     }
 
+    function reload(imageId) {
+      var itemId = imageId ? imageId : vm.item.id;
+      console.log("re/loading image", itemId);
+      vm.item = Image.get({id: itemId});
+      vm.things = ImageThing.query({image_id: itemId});
+      $q.all([vm.item.$promise, vm.things.$promise]).catch(handleError);
+    }
+
     function clear() {
       newResource();
       $state.go(".", {id: null})
     }
 
     function create() {
-      $scope.imageform.$setPristine();
       vm.item.errors = null;
       vm.item.$save().then(
         function () {
+          console.log("create complete", vm.item);
           $state.go(".", {id: vm.item.id});
         },
         handleError);
     }
 
     function update() {
-      $scope.imageform.$setPristine();
+      vm.item.errors = null;
       vm.item.$update().then(
         function () {
-          $state.go(".", {id: vm.item.id});
+          console.log("update complete", vm.item);
+          $scope.imageform.$setPristine();
           $state.reload();
         },
         handleError);
@@ -121,6 +129,7 @@
         vm.item["errors"] = {};
         vm.item["errors"]["full_message"] = response;
       }
+      $scope.imageform.$setPristine();
     }
   }
 })();
