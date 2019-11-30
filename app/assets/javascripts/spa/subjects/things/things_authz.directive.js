@@ -32,10 +32,10 @@
     vm.authz = {};
     vm.authz.authenticated = false;
     vm.authz.canCreate = false;
-      vm.authz.canQuery = false;
-      vm.authz.canUpdate = false;
-      vm.authz.canDelete = false;
-      vm.authz.canGetDetails = false;
+    vm.authz.canQuery = false;
+    vm.authz.canUpdate = false;
+    vm.authz.canDelete = false;
+    vm.authz.canGetDetails = false;
     vm.authz.canUpdateItem = canUpdateItem;
 
     ThingAuthzController.prototype.resetAccess = function () {

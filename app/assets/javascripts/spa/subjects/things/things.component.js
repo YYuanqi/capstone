@@ -49,7 +49,8 @@
     vm.$onInit = function () {
       console.log("ThingEditorController", $scope);
       if ($stateParams.id) {
-        vm.item = Thing.get({id: $stateParams.id});
+        // vm.item = Thing.get({id: $stateParams.id});
+        reload($stateParams.id);
       } else {
         newResource();
       }
@@ -99,6 +100,20 @@
         handleError);
     }
 
+    function reload(thingId) {
+      var itemId = thingId ? thingId : vm.item.id;
+      console.log("reloading thing", itemId);
+      vm.images = ThingImage.query({thing_id: itemId});
+      vm.item = Thing.get({id: itemId});
+      vm.images.$promise.then(
+        function () {
+          angular.forEach(vm.images, function (ti) {
+            ti.originalPriority = ti.priority;
+          });
+        });
+      $q.all([vm.item.$promise, vm.images]).catch(handleError);
+    }
+
     function handleError(response) {
       //console.log("error", response);
       if (response.data) {
@@ -124,8 +139,6 @@
         vm.items = Thing.query();
       }
     }
-    return;
-    //////////////
   }
 
 })();

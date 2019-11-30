@@ -8,7 +8,7 @@
   ThingImage.$inject = ["$resource", "spa.config.APP_CONFIG"];
 
   function ThingImage($resource, APP_CONFIG) {
-    return $resource(APP_CONFIG.server_url + "/api/:thing_id/thing_images/:id",
+    return $resource(APP_CONFIG.server_url + "/api/things/:thing_id/thing_images/:id",
       {
         thing_id: "@thing_id",
         id: "@id"
