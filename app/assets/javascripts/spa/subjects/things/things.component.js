@@ -83,46 +83,68 @@
     function update() {
       $scope.thingform.$setPristine();
       vm.item.errors = null;
-      vm.item.$update().then(
+      var update = vm.item.$update();
+      // function () {
+      //   console.log("thing updated", vm.item);
+      //   $state.reload();
+      // },
+      // handleError);
+      updateImageLinks(update);
+    }
+
+    function updateImageLinks(promise) {
+      console.log("update links to images");
+      var promises = [];
+      if (promise) promise.push(promise);
+      angular.foreach(vm.images, function (ti) {
+        if (ti.toRemove) {
+          promises.push(ti.$remove());
+        } else if (ti.originalPriority != ti.priority) {
+          promises.push(ti.$update());
+        }
+      });
+
+      console.log("waiting for promises", promises);
+      $q.all(promises).then(
         function () {
-          console.log("thing updated", vm.item);
-          $state.reload();
+          $scope.thingform.$setPristine();
+          reload();
         },
         handleError);
     }
+  }
 
-    function remove() {
-      vm.item.$remove().then(
-        function () {
-          console.log("thing.removed", vm.item);
-          clear();
-        },
-        handleError);
-    }
+  function remove() {
+    vm.item.$remove().then(
+      function () {
+        console.log("thing.removed", vm.item);
+        clear();
+      },
+      handleError);
+  }
 
-    function reload(thingId) {
-      var itemId = thingId ? thingId : vm.item.id;
-      console.log("reloading thing", itemId);
-      vm.images = ThingImage.query({thing_id: itemId});
-      vm.item = Thing.get({id: itemId});
-      vm.images.$promise.then(
-        function () {
-          angular.forEach(vm.images, function (ti) {
-            ti.originalPriority = ti.priority;
-          });
+  function reload(thingId) {
+    var itemId = thingId ? thingId : vm.item.id;
+    console.log("reloading thing", itemId);
+    vm.images = ThingImage.query({thing_id: itemId});
+    vm.item = Thing.get({id: itemId});
+    vm.images.$promise.then(
+      function () {
+        angular.forEach(vm.images, function (ti) {
+          ti.originalPriority = ti.priority;
         });
-      $q.all([vm.item.$promise, vm.images]).catch(handleError);
-    }
+      });
+    $q.all([vm.item.$promise, vm.images]).catch(handleError);
+  }
 
-    function handleError(response) {
-      //console.log("error", response);
-      if (response.data) {
-        vm.item["errors"] = response.data.errors;
-      }
-      if (!vm.item.errors) {
-        vm.item["errors"] = {};
-        vm.item["errors"]["full_messages"] = [response];
-      }
+  function handleError(response) {
+    console.log("error", response);
+    if (response.data) {
+      vm.item["errors"] = response.data.errors;
+    }
+    if (!vm.item.errors) {
+      vm.item["errors"] = {};
+      vm.item["errors"]["full_messages"] = [response];
     }
   }
 
@@ -140,5 +162,4 @@
       }
     }
   }
-
 })();
