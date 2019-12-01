@@ -65,6 +65,7 @@
       } else {
         vm.resetAccess();
       }
+      console.log(vm.authz);
     }
 
     function canUpdateItem(item) {

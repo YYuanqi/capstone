@@ -159,6 +159,7 @@
         vm.item["errors"] = {};
         vm.item["errors"]["full_messages"] = [response];
       }
+      $scope.thingform.$setPristine;
     }
   }
 
