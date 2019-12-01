@@ -54,7 +54,7 @@
       } else {
         newResource();
       }
-    }
+    };
 
     return;
 
@@ -92,11 +92,11 @@
       updateImageLinks(update);
     }
 
-    function updateImageLinks(promise) {
+    function updateImageLinks(parentPromise) {
       console.log("update links to images");
       var promises = [];
-      if (promise) promise.push(promise);
-      angular.foreach(vm.images, function (ti) {
+      if (parentPromise) promises.push(parentPromise);
+      angular.forEach(vm.images, function (ti) {
         if (ti.toRemove) {
           promises.push(ti.$remove());
         } else if (ti.originalPriority != ti.priority) {
@@ -112,39 +112,39 @@
         },
         handleError);
     }
-  }
 
-  function remove() {
-    vm.item.$remove().then(
-      function () {
-        console.log("thing.removed", vm.item);
-        clear();
-      },
-      handleError);
-  }
-
-  function reload(thingId) {
-    var itemId = thingId ? thingId : vm.item.id;
-    console.log("reloading thing", itemId);
-    vm.images = ThingImage.query({thing_id: itemId});
-    vm.item = Thing.get({id: itemId});
-    vm.images.$promise.then(
-      function () {
-        angular.forEach(vm.images, function (ti) {
-          ti.originalPriority = ti.priority;
-        });
-      });
-    $q.all([vm.item.$promise, vm.images]).catch(handleError);
-  }
-
-  function handleError(response) {
-    console.log("error", response);
-    if (response.data) {
-      vm.item["errors"] = response.data.errors;
+    function remove() {
+      vm.item.$remove().then(
+        function () {
+          console.log("thing.removed", vm.item);
+          clear();
+        },
+        handleError);
     }
-    if (!vm.item.errors) {
-      vm.item["errors"] = {};
-      vm.item["errors"]["full_messages"] = [response];
+
+    function reload(thingId) {
+      var itemId = thingId ? thingId : vm.item.id;
+      console.log("reloading thing", itemId);
+      vm.images = ThingImage.query({thing_id: itemId});
+      vm.item = Thing.get({id: itemId});
+      vm.images.$promise.then(
+        function () {
+          angular.forEach(vm.images, function (ti) {
+            ti.originalPriority = ti.priority;
+          });
+        });
+      $q.all([vm.item.$promise, vm.images]).catch(handleError);
+    }
+
+    function handleError(response) {
+      console.log("error", response);
+      if (response.data) {
+        vm.item["errors"] = response.data.errors;
+      }
+      if (!vm.item.errors) {
+        vm.item["errors"] = {};
+        vm.item["errors"]["full_messages"] = [response];
+      }
     }
   }
 
