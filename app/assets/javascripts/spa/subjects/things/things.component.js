@@ -51,8 +51,12 @@
     vm.$onInit = function () {
       console.log("ThingEditorController", $scope);
       if ($stateParams.id) {
-        // vm.item = Thing.get({id: $stateParams.id});
-        reload($stateParams.id);
+        // reload($stateParams.id);
+        $scope.$watch(function () {
+          return vm.authz.authenticaed;
+        }, function () {
+          reload($stateParams.id)
+        })
       } else {
         newResource();
       }

@@ -12,7 +12,7 @@ module SubjectsUiHelper
       expect(page).to have_css("span.image_id", text: image.id, visible: false)
       expect(page).to have_css(".image-controls")
       expect(page).to have_css("ui.image-things li span.thing_id",
-                               visiable: false,
+                               visible: false,
                                count: ThingImage.where(image: image).count,
                                wait: 5)
     end
