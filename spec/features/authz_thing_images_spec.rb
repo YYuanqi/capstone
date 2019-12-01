@@ -7,13 +7,13 @@ RSpec.feature "AuthzThingImages", type: :feature, :js => true do
 
   let(:member) { create_user }
   let(:authenticated) { create_user }
-  let(:thing_props) { FactoryGirl.attributes_for(:thing) }
-  let(:things) { FactoryGirl.create_list(:thing, 3) }
-  let(:images) { FactoryGirl.create_list(:image, 3,
+  let(:thing_props) { FactoryBot.attributes_for(:thing) }
+  let(:things) { FactoryBot.create_list(:thing, 3) }
+  let(:images) { FactoryBot.create_list(:image, 3,
                                          :creator_id => authenticated[:id]) }
   let(:linked_thing) { things[0] }
   let(:linked_image) { images[0] }
-  let(:thing_image) { FactoryGirl.create(:thing_image,
+  let(:thing_image) { FactoryBot.create(:thing_image,
                                          :thing => linked_thing,
                                          :image => linked_image,
                                          :priority => 3,
