@@ -303,7 +303,7 @@ RSpec.feature "AuthzThingImages", type: :feature, :js => true do
     before(:each) { visit_thing linked_thing }
 
     it "can remove link to image" do
-      expect(ThingImage.where(:id => linked_image.id)).to exist
+      expect(ThingImage.where(image_id:  linked_image.id)).to exist
       within ("sd-thing-editor .thing-form") do
         expect(page).to have_css(".thing-images ul li", :text => displayed_caption(linked_image))
 
@@ -320,13 +320,13 @@ RSpec.feature "AuthzThingImages", type: :feature, :js => true do
         expect(page).to have_no_css(".thing-images ul li",
                                     :text => displayed_caption(linked_image))
         #link is removed from database
-        expect(ThingImage.where(:id => linked_image.id)).to_not exist
+        expect(ThingImage.where(image_id: linked_image.id)).to_not exist
       end
     end
 
     it "can remove link with update to thing" do
       expect(Thing.find(linked_thing.id).name).to eq(linked_thing.name)
-      expect(ThingImage.where(:id => linked_image.id)).to exist
+      expect(ThingImage.where(image_id: linked_image.id)).to exist
 
       within("sd-thing-editor .thing-form") do
         expect(page).to have_css(".thing-images ul li", :text => displayed_caption(linked_image))
@@ -352,7 +352,7 @@ RSpec.feature "AuthzThingImages", type: :feature, :js => true do
         expect(page).to have_no_field("thing-name", :with => linked_thing.name)
         expect(page).to have_field("thing-name", :with => new_name, :visible => false)
         #link is removed from database
-        expect(ThingImage.where(:id => linked_image.id)).to_not exist
+        expect(ThingImage.where(image_id: linked_image.id)).to_not exist
         expect(Thing.find(linked_thing.id).name).to eq(new_name)
       end
     end
