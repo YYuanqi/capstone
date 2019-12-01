@@ -17,7 +17,7 @@ module SubjectsUiHelper
                                wait: 5)
     end
 
-    if expected_linkables && logged_in? && false
+    if expected_linkables && logged_in?
       expect(page).to have_css(".link-things select option", count: expected_linkables)
     end
   end
