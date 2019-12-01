@@ -45,6 +45,8 @@
     vm.clear = clear;
     vm.update = update;
     vm.remove = remove;
+    vm.haveDirtyLinks = haveDirtyLinks;
+    vm.updateImageLinks = updateImageLinks;
 
     vm.$onInit = function () {
       console.log("ThingEditorController", $scope);
@@ -62,6 +64,18 @@
     function newResource() {
       vm.item = new Thing();
       return vm.item;
+    }
+
+    function haveDirtyLinks() {
+      if (vm.images) {
+        for (var i = 0; i < vm.images.length; i++) {
+          var ti = vm.images[i];
+          if (ti.toRemove || ti.originalPriority !== ti.priority) {
+            return true;
+          }
+        }
+      }
+      return false;
     }
 
     function create() {
@@ -99,7 +113,7 @@
       angular.forEach(vm.images, function (ti) {
         if (ti.toRemove) {
           promises.push(ti.$remove());
-        } else if (ti.originalPriority != ti.priority) {
+        } else if (ti.originalPriority !== ti.priority) {
           promises.push(ti.$update());
         }
       });
