@@ -131,6 +131,8 @@ RSpec.feature "AuthzThings", type: :feature, js: true do
         fill_in("thing-desc", :with => thing_props[:description])
         fill_in("thing-notes", :with => thing_props[:notes])
         click_button("Update Thing")
+        # wait after click update button, otherwise bug raises
+        sleep(3)
         expect(page).to have_no_button("Update Thing")
         click_button("Clear Thing")
         expect(page).to have_no_button("Clear Thing")
@@ -279,7 +281,7 @@ RSpec.feature "AuthzThings", type: :feature, js: true do
           expect(page).to have_field("thing-desc", :with => thing.description,
                                      :readonly => true)
           expect(page).to have_no_field("thing-notes")
-          expect(page).to have_no_css("button");
+          expect(page).to have_no_css("button")
         end
       end
     end
