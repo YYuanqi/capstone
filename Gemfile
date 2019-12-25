@@ -10,6 +10,7 @@ gem 'rack-cors', '~>1.0.3', :require => 'rack/cors'
 gem 'pry-rails'
 gem 'jbuilder', '~>2.9'
 gem 'devise_token_auth', '~>0.1', '>=0.1.39'
+gem 'pundit', '~>1.1', '>=1.1.0'
 
 gem 'sass-rails', '~>5.0'
 gem 'uglifier', '~>4.1'
