@@ -7,7 +7,7 @@ RSpec.describe Role, type: :model do
     it 'has roles' do
       user.roles.create(role_name: Role::ADMIN)
       user.roles.create(role_name: Role::ORIGINATOR, mname: 'City')
-      user.roles.create(role_name: GRole::ORGANIZER, mname: 'State', mid: 1)
+      user.roles.create(role_name: Role::ORGANIZER, mname: 'State', mid: 1)
       user.roles.create(role_name: Role::MEMBER, mname: 'State', mid: 1)
 
       db_user = User.find(user.id)
