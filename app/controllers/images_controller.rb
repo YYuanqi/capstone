@@ -1,7 +1,7 @@
 class ImagesController < ApplicationController
   before_action :set_image, only: %i[show update destroy]
   wrap_parameters :image, include: ["caption"]
-  before_action :authenticate_user!, only: [:create, :update, :destory]
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
 
   # GET /images
   # GET /images.json

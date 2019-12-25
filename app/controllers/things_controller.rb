@@ -1,6 +1,6 @@
 class ThingsController < ApplicationController
   before_action :set_thing, only: [:show, :update, :destroy]
-  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :authenticate_user!, only: [:index, :create, :update, :destroy]
   wrap_parameters :thing, include: ["name", "description", "notes"]
 
   # GET /things
