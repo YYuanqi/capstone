@@ -13,7 +13,7 @@ RSpec.describe "Images", type: :request do
     it_should_behave_like "modifiable resource", :image
   end
 
-  shared_examples "cannot create" do |status = :unauthorized|
+  shared_examples "cannot create" do |status=:unauthorized|
     it "create fails with #{status}" do
       jpost images_path, image_props
       expect(response).to have_http_status(status)
@@ -35,16 +35,16 @@ RSpec.describe "Images", type: :request do
     end
   end
   shared_examples "can create" do
-    it "can create" do
+    it "is created" do
       jpost images_path, image_props
       #pp parsed_body
       expect(response).to have_http_status(:created)
-      payload = parsed_body
+      payload=parsed_body
       expect(payload).to include("id")
-      expect(payload).to include("caption" => image_props[:caption])
-      #expect(payload).to include("user_roles")
-      #expect(payload["user_roles"]).to include(Role::ORGANIZER)
-      #expect(Role.where(:user_id => user["id"], :role_name => Role::ORGANIZER)).to exist
+      expect(payload).to include("caption"=>image_props[:caption])
+      expect(payload).to include("user_roles")
+      expect(payload["user_roles"]).to include(Role::ORGANIZER)
+      expect(Role.where(:user_id=>user["id"],:role_name=>Role::ORGANIZER)).to exist
     end
   end
   shared_examples "can update" do
@@ -64,7 +64,7 @@ RSpec.describe "Images", type: :request do
       jget images_path
       expect(response).to have_http_status(:ok)
       #pp parsed_body
-      payload = parsed_body
+      payload=parsed_body
       expect(payload.size).to_not eq(0)
       payload.each do |r|
         expect(r).to include("id")
@@ -72,8 +72,8 @@ RSpec.describe "Images", type: :request do
         if user_roles.empty?
           expect(r).to_not include("user_roles")
         else
-          #expect(r).to include("user_roles")
-          #expect(r["user_roles"].to_a).to include(*user_roles)
+          expect(r).to include("user_roles")
+          expect(r["user_roles"].to_a).to include(*user_roles)
         end
       end
     end
@@ -81,14 +81,14 @@ RSpec.describe "Images", type: :request do
       jget image_path(image_id)
       expect(response).to have_http_status(:ok)
       #pp parsed_body
-      payload = parsed_body
-      expect(payload).to include("id" => image.id)
-      expect(payload).to include("caption" => image.caption)
+      payload=parsed_body
+      expect(payload).to include("id"=>image.id)
+      expect(payload).to include("caption"=>image.caption)
       if user_roles.empty?
-        #expect(payload).to_not include("user_roles")
+        expect(payload).to_not include("user_roles")
       else
-        #expect(payload).to include("user_roles")
-        #expect(payload["user_roles"].to_a).to include(*user_roles)
+        expect(payload).to include("user_roles")
+        expect(payload["user_roles"].to_a).to include(*user_roles)
       end
     end
   end
@@ -98,8 +98,8 @@ RSpec.describe "Images", type: :request do
     let(:admin_account) { apply_admin(signup FactoryBot.attributes_for(:user)) }
     let(:image_props) { FactoryBot.attributes_for(:image, :with_caption) }
     let(:image_resources) { 3.times.map { create_resource images_path, :image } }
-    let(:image_id) { image_resources[0]["id"] }
-    let(:image) { Image.find(image_id) }
+    let(:image_id)  { image_resources[0]["id"] }
+    let(:image)     { Image.find(image_id) }
 
 
     context "caller is unauthenticated" do
@@ -110,7 +110,7 @@ RSpec.describe "Images", type: :request do
       it_should_behave_like "all fields present", []
     end
     context "caller is authenticated organizer" do
-      let!(:user) { login account }
+      let!(:user)   { login account }
       before(:each) { image_resources }
       it_should_behave_like "can create"
       it_should_behave_like "can update"
@@ -128,6 +128,27 @@ RSpec.describe "Images", type: :request do
       it_should_behave_like "cannot update", :forbidden
       it_should_behave_like "can delete"
       it_should_behave_like "all fields present", []
+    end
+
+  end
+
+  describe "role merge" do
+    it "returns one image with flattened roles" do
+      roles=["foo","bar","baz"]
+      originator=FactoryBot.create(:user)
+      image=FactoryBot.create(:image,
+                               :creator_id=>originator.id);
+      roles.each do |role|
+        originator.add_role(role,image).save
+      end
+      login originator
+      jget images_path
+      #pp parsed_body
+      expect(response).to have_http_status(:ok)
+      payload=parsed_body
+      expect(payload.size).to eq(1)
+      expect(payload[0]).to include("user_roles")
+      expect(payload[0]["user_roles"]).to include(*roles)
     end
   end
 end
