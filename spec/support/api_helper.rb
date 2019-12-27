@@ -56,7 +56,7 @@ module ApiHelper
   end
 
   def apply_admin account
-    User.find(account[:id]).roles.create(role_role: Role::ADMIN)
+    User.find(account[:id]).roles.create(role_name: Role::ADMIN)
     account
   end
 
