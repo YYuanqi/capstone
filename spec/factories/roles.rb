@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :role do
-    user { nil }
+    user_id { nil }
     role_name { 'MyString' }
     mname { 'MyString' }
     mid { 1 }
