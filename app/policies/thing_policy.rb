@@ -25,10 +25,11 @@ class ThingPolicy < ApplicationPolicy
     end
 
     def user_roles
-      join_claus = ["left join roles on roles.mname='Thing'",
+      join_claus = ["join roles on roles.mname='Thing'",
                     "roles.mid=things.id",
                     "roles.user_id #{user_criteria}"].join(" and ")
       scope.select("images, roles.user_roles").joins(join_claus)
+        .where("roles.role_name": [Role::MEMBER, Role::ORGANIZER])
     end
   end
 end
