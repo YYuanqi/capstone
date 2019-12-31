@@ -23,7 +23,7 @@ class ApplicationPolicy
   end
 
   def originator?
-    @user.has_role([Role::ORIGINATOR], @record.model_name.name, @record.id)
+    @user.has_role([Role::ORIGINATOR], @record.model_name.name)
   end
 
   def index?
