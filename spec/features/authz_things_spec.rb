@@ -200,14 +200,14 @@ RSpec.feature "AuthzThings", type: :feature, js: true do
     after(:each) { logout }
 
     context "unauthenticated user" do
-      before(:each) { visit_things things}
+      before(:each) { visit_things things }
       it_behaves_like "cannot list things"
       it_behaves_like "displays correct buttons for role",
                       [],
                       ["Create Thing", "Clear Thing", "Update Thing", "Delete Thing"]
     end
     context "authenticated user" do
-      before(:each) { login authenticated; visit_things things}
+      before(:each) { login authenticated; visit_things things }
 
       it_behaves_like "can list things"
       it_behaves_like "displays correct buttons for role",

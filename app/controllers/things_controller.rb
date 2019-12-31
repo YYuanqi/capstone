@@ -1,4 +1,6 @@
 class ThingsController < ApplicationController
+  include ActionController::Helpers
+  helper ThingsHelper
   before_action :set_thing, only: [:show, :update, :destroy]
   before_action :authenticate_user!, only: [:index, :create, :update, :destroy]
   wrap_parameters :thing, include: ["name", "description", "notes"]
@@ -44,15 +46,16 @@ class ThingsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_thing
-      @thing = Thing.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def thing_params
-      params.require(:thing).tap { |p|
-        p.require(:name)
-      }.permit(:name, :description, :notes)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_thing
+    @thing = Thing.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def thing_params
+    params.require(:thing).tap { |p|
+      p.require(:name)
+    }.permit(:name, :description, :notes)
+  end
 end
