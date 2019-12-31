@@ -85,6 +85,7 @@ end
 
 RSpec.shared_examples 'show resource' do |model|
   let(:resource) { FactoryBot.create(model) }
+  let!(:apply_roles) { apply_organizer User.find(user["id"]), resources }
   let(:payload) { parsed_body }
   let(:bad_id) { 1_234_567_890 }
 
@@ -112,6 +113,7 @@ end
 
 RSpec.shared_examples 'resource index' do |model|
   let!(:resources) { (1..5).map { FactoryBot.create(model) } }
+  let!(:apply_roles) { applay_organizer User.find(user["id"]), resources }
   let(:payload) { parsed_body }
 
   it "return all #{model} instance" do

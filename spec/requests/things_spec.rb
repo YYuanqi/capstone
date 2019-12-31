@@ -36,16 +36,16 @@ RSpec.describe "Things", type: :request do
     end
   end
 
-  shared_examples "can create" do |user_roles=[Role::ORGANIZER]|
+  shared_examples "can create" do |user_roles = [Role::ORGANIZER]|
     it "creates and has user_roles #{user_roles}" do
       jpost things_path, thing_props
       expect(response).to have_http_status(:created)
       #pp parsed_body
-      payload=parsed_body
+      payload = parsed_body
       expect(payload).to include("id")
-      expect(payload).to include("name"=>thing_props[:name])
-      expect(payload).to include("description"=>thing_props[:description])
-      expect(payload).to include("notes"=>thing_props[:notes])
+      expect(payload).to include("name" => thing_props[:name])
+      expect(payload).to include("description" => thing_props[:description])
+      expect(payload).to include("notes" => thing_props[:notes])
       expect(payload).to include("user_roles")
       expect(payload["user_roles"]).to include(*user_roles)
     end
@@ -64,7 +64,7 @@ RSpec.describe "Things", type: :request do
       expect(response).to have_http_status(:no_content)
     end
     it "reports update error for invalid data" do
-      jput thing_path(thing_id), thing_props.merge(:name=>nil)
+      jput thing_path(thing_id), thing_props.merge(:name => nil)
       expect(response).to have_http_status(:bad_request)
     end
   end
@@ -75,26 +75,19 @@ RSpec.describe "Things", type: :request do
     end
   end
   shared_examples "field(s) redacted" do
-    it "list does not include notes" do
+    it "list does not show non-members" do
       jget things_path
       expect(response).to have_http_status(:ok)
       #pp parsed_body
-      payload=parsed_body
-      expect(payload.size).to_not eq(0)
-      payload.each do |r|
-        expect(r).to include("id")
-        expect(r).to include("name")
-        expect(r).to include("description")
-        expect(r).to_not include("notes")
-        expect(r).to_not include("user_roles")
-      end
+      payload = parsed_body
+      expect(payload.size).to eq(0)
     end
     it "get does not include notes" do
       jget thing_path(thing)
       expect(response).to have_http_status(:ok)
-      payload=parsed_body
-      expect(payload).to include("id"=>thing.id)
-      expect(payload).to include("name"=>thing.name)
+      payload = parsed_body
+      expect(payload).to include("id" => thing.id)
+      expect(payload).to include("name" => thing.name)
       expect(payload).to include("description")
       expect(payload).to_not include("notes")
       expect(payload).to_not include("user_roles")
@@ -105,7 +98,7 @@ RSpec.describe "Things", type: :request do
       jget things_path
       expect(response).to have_http_status(:ok)
       #pp parsed_body
-      payload=parsed_body
+      payload = parsed_body
       expect(payload.size).to_not eq(0)
       payload.each do |r|
         expect(r).to include("id")
@@ -120,9 +113,9 @@ RSpec.describe "Things", type: :request do
       jget thing_path(thing)
       expect(response).to have_http_status(:ok)
       #pp parsed_body
-      payload=parsed_body
-      expect(payload).to include("id"=>thing.id)
-      expect(payload).to include("name"=>thing.name)
+      payload = parsed_body
+      expect(payload).to include("id" => thing.id)
+      expect(payload).to include("name" => thing.name)
       expect(payload).to include("description")
       expect(payload).to include("notes")
       expect(payload).to include("user_roles")
@@ -131,11 +124,11 @@ RSpec.describe "Things", type: :request do
   end
 
   describe "Thing authorization" do
-    let(:account)  { signup FactoryBot.attributes_for(:user) }
-    let(:thing_props)   { FactoryBot.attributes_for(:thing, :with_fields) }
+    let(:account) { signup FactoryBot.attributes_for(:user) }
+    let(:thing_props) { FactoryBot.attributes_for(:thing, :with_fields) }
     let(:thing_resources) { 3.times.map { create_resource things_path, :thing } }
-    let(:thing_id)   { thing_resources[0]["id"] }
-    let(:thing)      { Thing.find(thing_id) }
+    let(:thing_id) { thing_resources[0]["id"] }
+    let(:thing) { Thing.find(thing_id) }
     before(:each) do
       login originator
       thing_resources
@@ -162,7 +155,7 @@ RSpec.describe "Things", type: :request do
 
     context "caller is member" do
       before(:each) do
-        thing_resources.each {|t| apply_member(account,Thing.find(t["id"])) }
+        thing_resources.each { |t| apply_member(account, Thing.find(t["id"])) }
         login account
       end
       it_should_behave_like "cannot create", :forbidden
@@ -173,7 +166,7 @@ RSpec.describe "Things", type: :request do
 
     context "caller is organizer" do
       before(:each) do
-        thing_resources.each {|t| apply_organizer(account,Thing.find(t["id"])) }
+        thing_resources.each { |t| apply_organizer(account, Thing.find(t["id"])) }
         login account
       end
       it_should_behave_like "cannot create", :forbidden
