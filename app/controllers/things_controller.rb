@@ -28,10 +28,15 @@ class ThingsController < ApplicationController
     authorize Thing
     @thing = Thing.new(thing_params)
 
-    if @thing.save
-      render :show, status: :created, location: @thing
-    else
-      render json: @thing.errors, status: :unprocessable_entity
+    User.transaction do
+      if @thing.save
+        role = current_user.add_role(Role::ORGANIZER, @thing)
+        @thing.user_roles << role.role_name
+        role.save!
+        render :show, status: :created, location: @thing
+      else
+        render json: @thing.errors, status: :unprocessable_entity
+      end
     end
   end
 
