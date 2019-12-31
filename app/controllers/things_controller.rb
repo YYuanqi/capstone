@@ -10,17 +10,20 @@ class ThingsController < ApplicationController
   # GET /things
   # GET /things.json
   def index
+    authorize Thing
     @things = Thing.all
   end
 
   # GET /things/1
   # GET /things/1.json
   def show
+    authrorize @thing
   end
 
   # POST /things
   # POST /things.json
   def create
+    authorize Thing
     @thing = Thing.new(thing_params)
 
     if @thing.save
@@ -33,6 +36,8 @@ class ThingsController < ApplicationController
   # PATCH/PUT /things/1
   # PATCH/PUT /things/1.json
   def update
+    authorize thing
+
     if @thing.update(thing_params)
       head :no_content
     else
@@ -43,6 +48,8 @@ class ThingsController < ApplicationController
   # DELETE /things/1
   # DELETE /things/1.json
   def destroy
+    authorize @thing
+
     @thing.destroy
     head :no_content
   end
