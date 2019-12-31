@@ -60,7 +60,7 @@ module ApiHelper
     account
   end
 
-  def apply_originator account, moodel_class
+  def apply_originator account, model_class
     User.find(account[:id]).add_role(Role::ORIGINATOR, model_class).save
     account
   end
