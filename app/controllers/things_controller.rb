@@ -11,13 +11,15 @@ class ThingsController < ApplicationController
   # GET /things.json
   def index
     authorize Thing
-    @things = Thing.all
+
+    things = Thing.all
+    @things = ThingPolicy.merge(things)
   end
 
   # GET /things/1
   # GET /things/1.json
   def show
-    authrorize @thing
+    authorize @thing
   end
 
   # POST /things
