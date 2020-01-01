@@ -2,7 +2,7 @@ class ThingsController < ApplicationController
   include ActionController::Helpers
   helper ThingsHelper
   before_action :set_thing, only: [:show, :update, :destroy]
-  before_action :authenticate_user!, only: [:index, :create, :update, :destroy]
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
   wrap_parameters :thing, include: ["name", "description", "notes"]
   after_action :verify_authorized
   after_action :verify_policy_scoped, only: [:index]
@@ -20,6 +20,11 @@ class ThingsController < ApplicationController
   # GET /things/1.json
   def show
     authorize @thing
+
+    things = ThingPolicy::Scope
+               .new(current_user, Thing.where(id: @thing.id))
+               .user_roles(false)
+    @thing = ThingPolicy.merge(things).first
   end
 
   # POST /things
@@ -43,7 +48,7 @@ class ThingsController < ApplicationController
   # PATCH/PUT /things/1
   # PATCH/PUT /things/1.json
   def update
-    authorize thing
+    authorize @thing
 
     if @thing.update(thing_params)
       head :no_content

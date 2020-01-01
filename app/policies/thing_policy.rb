@@ -15,7 +15,7 @@ class ThingPolicy < ApplicationPolicy
     organizer?
   end
 
-  def delete?
+  def destroy?
     organizer_or_admin?
   end
 
@@ -24,12 +24,16 @@ class ThingPolicy < ApplicationPolicy
       user_roles
     end
 
-    def user_roles
-      join_claus = ["join roles on roles.mname='Thing'",
+    def user_roles member_only = true
+      join_type = member_only ? 'join' : 'left join'
+      join_claus = ["#{join_type} roles on roles.mname='Thing'",
                     "roles.mid=things.id",
                     "roles.user_id #{user_criteria}"].join(" and ")
-      scope.select("images, roles.user_roles").joins(join_claus)
-        .where("roles.role_name": [Role::MEMBER, Role::ORGANIZER])
+      scope.select("things.*, roles.role_name")
+           .joins(join_claus)
+           .tap do |scp|
+             scp.where("roles.role_name": [Role::MEMBER, Role::ORGANIZER]) if member_only
+           end
     end
   end
 end
