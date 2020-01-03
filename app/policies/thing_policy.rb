@@ -19,6 +19,26 @@ class ThingPolicy < ApplicationPolicy
     organizer_or_admin?
   end
 
+  def get_linkable?
+    true
+  end
+
+  def get_images?
+    true
+  end
+
+  def add_image?
+    member_or_organizer?
+  end
+
+  def update_image?
+    organizer?
+  end
+
+  def remove_image?
+    organizer_or_admin?
+  end
+
   class Scope < Scope
     def resolve
       user_roles
@@ -30,10 +50,10 @@ class ThingPolicy < ApplicationPolicy
                     "roles.mid=things.id",
                     "roles.user_id #{user_criteria}"].join(" and ")
       scope.select("things.*, roles.role_name")
-           .joins(join_claus)
-           .tap do |scp|
-             scp.where("roles.role_name": [Role::MEMBER, Role::ORGANIZER]) if member_only
-           end
+        .joins(join_claus)
+        .tap do |scp|
+        scp.where("roles.role_name": [Role::MEMBER, Role::ORGANIZER]) if member_only
+      end
     end
   end
 end

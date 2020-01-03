@@ -1,24 +1,34 @@
 class ThingImagesController < ApplicationController
+  include ActionController::Helpers
+  helper ThingsHelper
   wrap_parameters :thing_image, include: ["image_id", "thing_id", "priority"]
   before_action :get_thing_image, only: [:update, :destroy]
   before_action :get_thing, only: [:index, :update, :destroy]
+  before_action :get_image, only: [:image_things]
   before_action :authenticate_user!, only: [:create, :update, :destroy]
+  after_action :verify_authorized
+  after_action :verify_policy_scoped, only: [:linkable_things]
 
   # GET /thing_images
   # GET /thing_images.json
   def index
+    authorize @thing, :get_images?
     @thing_images = @thing.thing_images.prioritized.with_caption
   end
 
   def image_things
-    image = Image.find(params[:image_id])
-    @thing_images = image.thing_images.prioritized.with_name
+    authorize @image, :get_things?
+
+    @thing_images = @image.thing_images.prioritized.with_name
     render :index
   end
 
   def linkable_things
+    authorize Thing, :get_linkables?
     image = Image.find(params[:image_id])
-    @things = current_user ? Thing.not_linked(image) : []
+    things = policy_scope(Thing.not_linked(image))
+    @things = ThingPolicy.merge(things)
+
     render "things/index"
   end
 
@@ -26,13 +36,17 @@ class ThingImagesController < ApplicationController
   # POST /thing_images.json
   def create
     thing_image = ThingImage.new(thing_image_create_params.merge({
-                                  :image_id => params[:image_id],
-                                  :thing_id => params[:thing_id]}))
-    if !Thing.where(id: thing_image.thing_id).exists?
+                                                                   :image_id => params[:image_id],
+                                                                   :thing_id => params[:thing_id]}))
+    thing = Thing.where(id: thing_image.thing_id).first
+    if !thing
       full_message_error "cannot find thing[#{params[:thing_id]}]", :bad_request
     elsif !Image.where(id: thing_image.image_id).exists?
       full_message_error "cannnot find image[#{params[:image_id]}]", :bad_request
     end
+
+    authorize thing, :add_image?
+    thing_image.creator_id = current_user.id
 
     thing_image.creator_id = current_user.id
     if thing_image.save
@@ -60,24 +74,29 @@ class ThingImagesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def get_thing_image
-      @thing_image ||= ThingImage.find(params[:id])
-    end
 
-    def get_thing
-      @thing ||= Thing.find(params[:thing_id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def get_thing_image
+    @thing_image ||= ThingImage.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def thing_image_create_params
-      params.require(:thing_image).tap do |p|
-        p.require(:image_id) unless params[:image_id]
-        p.require(:thing_id) unless params[:thing_id]
-      end.permit(:priority, :image_id, :thing_id)
-    end
+  def get_thing
+    @thing ||= Thing.find(params[:thing_id])
+  end
 
-    def thing_image_update_params
-      params.require(:thing_image).permit(:priority)
-    end
+  def get_image
+    @thing ||= Image.find(params[:image_id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def thing_image_create_params
+    params.require(:thing_image).tap do |p|
+      p.require(:image_id) unless params[:image_id]
+      p.require(:thing_id) unless params[:thing_id]
+    end.permit(:priority, :image_id, :thing_id)
+  end
+
+  def thing_image_update_params
+    params.require(:thing_image).permit(:priority)
+  end
 end

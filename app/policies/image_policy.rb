@@ -19,6 +19,10 @@ class ImagePolicy < ApplicationPolicy
     organizer_or_admin?
   end
 
+  def get_things?
+    true
+  end
+
   class Scope < Scope
     def resolve
       user_roles
