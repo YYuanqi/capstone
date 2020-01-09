@@ -81,7 +81,7 @@ RSpec.describe "ThingImages", type: :request do
       jpost thing_thing_images_path(linked_thing_id), thing_image_props
       expect(response).to have_http_status(:no_content)
       jget thing_thing_images_path(linked_thing_id)
-      expect(parsed_body.size).to eq(linked_thing_ids.count +1)
+      expect(parsed_body.size).to eq(linked_image_ids.count + 1)
     end
 
     it "bad request when link to unknown Image" do
@@ -98,14 +98,14 @@ RSpec.describe "ThingImages", type: :request do
 
   shared_examples "can update link" do
     it do
-      jput thing_thing_image_path(thing["id"], thing_image["id"]), thing_image.merge("priority" => 0)
+      jput thing_thing_image_path(thing_image["thing_id"], thing_image["id"]), thing_image.merge("priority" => 0)
       expect(response).to have_http_status(:no_content)
     end
   end
 
   shared_examples "can delete link" do
     it do
-      jdelete thing_thing_image_path(thing["id"], thing_image["id"])
+      jdelete thing_thing_image_path(thing_image["thing_id"], thing_image["id"])
       expect(response).to have_http_status(:no_content)
     end
   end
@@ -119,14 +119,14 @@ RSpec.describe "ThingImages", type: :request do
 
   shared_examples "cannot update link" do |status|
     it do
-      jpatch thing_thing_image_path(thing["id"], thing_image["id"]), "priority" => 0
+      jpatch thing_thing_image_path(thing_image["thing_id"], thing_image["id"]), "priority" => 0
       expect(response).to have_http_status(status)
     end
   end
 
   shared_examples "cannot delete link" do |status|
     it do
-      jdelete thing_thing_image_path(thing["id"], thing_image["id"])
+      jdelete thing_thing_image_path(thing_image["thing_id"], thing_image["id"])
       expect(response).to have_http_status(status)
     end
   end

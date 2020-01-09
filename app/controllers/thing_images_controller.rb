@@ -42,9 +42,11 @@ class ThingImagesController < ApplicationController
     if !thing
       full_message_error "cannot find thing[#{params[:thing_id]}]", :bad_request
       skip_authorization
+      return
     elsif !Image.where(id: thing_image.image_id).exists?
       full_message_error "cannnot find image[#{params[:image_id]}]", :bad_request
       skip_authorization
+      return
     end
 
     authorize thing, :add_image?
@@ -53,13 +55,14 @@ class ThingImagesController < ApplicationController
     if thing_image.save
       head :no_content
     else
-      rendor json: {errors: @thing_image.errors.messages}, status: :unprocessable_entity
+      render json: {errors: thing_image.errors.messages}, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /thing_images/1
   # PATCH/PUT /thing_images/1.json
   def update
+    authorize @thing, :update_image?
     if @thing_image.update(thing_image_update_params)
       head :no_content
     else
@@ -70,6 +73,7 @@ class ThingImagesController < ApplicationController
   # DELETE /thing_images/1
   # DELETE /thing_images/1.json
   def destroy
+    authorize @thing, :remove_image?
     @thing_image.destroy
     head :no_content
   end
@@ -86,7 +90,7 @@ class ThingImagesController < ApplicationController
   end
 
   def get_image
-    @thing ||= Image.find(params[:image_id])
+    @image ||= Image.find(params[:image_id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

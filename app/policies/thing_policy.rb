@@ -19,7 +19,7 @@ class ThingPolicy < ApplicationPolicy
     organizer_or_admin?
   end
 
-  def get_linkable?
+  def get_linkables?
     true
   end
 
