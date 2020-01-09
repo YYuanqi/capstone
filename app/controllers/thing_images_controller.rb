@@ -48,7 +48,6 @@ class ThingImagesController < ApplicationController
     end
 
     authorize thing, :add_image?
-    thing_image.creator_id = current_user.id
 
     thing_image.creator_id = current_user.id
     if thing_image.save

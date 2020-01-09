@@ -14,7 +14,7 @@ class ApplicationPolicy
     @user.has_role([Role::ADMIN, Role::ORGANIZER], @record.model_name.name, @record.id)
   end
 
-  def member_or_orgnizer?
+  def member_or_organizer?
     @user.has_role([Role::MEMBER, Role::ORGANIZER], @record.model_name.name, @record.id)
   end
 
