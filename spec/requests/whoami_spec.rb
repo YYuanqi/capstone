@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-Rspec.describe 'WhoAmI', type: :request do
+RSpec.describe 'WhoAmI', type: :request do
   include_context 'db_cleanup_each'
   let(:account) { signup FactoryBot.attributes_for(:user) }
 
@@ -18,6 +18,7 @@ Rspec.describe 'WhoAmI', type: :request do
       expect(payload).to_not include('id')
       expect(payload).to_not include('email')
       expect(payload).to_not include('user_roles')
+      []
     end
   end
 
@@ -66,7 +67,7 @@ Rspec.describe 'WhoAmI', type: :request do
   end
 
   context 'originator_admin' do
-    let(:user) { applay_admin(apply_originator(login(account), Thing)) }
+    let(:user) { apply_admin(apply_originator(login(account), Thing)) }
     it 'has originator and admin role' do
       user_roles = whoami user
       expect(user_roles.size).to eq(2)
@@ -82,8 +83,8 @@ Rspec.describe 'WhoAmI', type: :request do
       end
 
       expect(admin_role).to_not be_nil
-      expect(originator).to_not be_nil
-      expect(originator_role['resources']).to eq(Thing.model_name)
+      expect(originator_role).to_not be_nil
+      expect(originator_role['resource']).to eq(Thing.model_name)
     end
   end
 end

@@ -56,17 +56,17 @@ module ApiHelper
   end
 
   def apply_admin account
-    User.find(account[:id]).roles.create(role_name: Role::ADMIN)
+    User.find(account.symbolize_keys[:id]).roles.create(role_name: Role::ADMIN)
     account
   end
 
   def apply_originator account, model_class
-    User.find(account[:id]).add_role(Role::ORIGINATOR, model_class).save
+    User.find(account.symbolize_keys[:id]).add_role(Role::ORIGINATOR, model_class).save
     account
   end
 
   def apply_role account, role, object
-    user = User.find(account[:id])
+    user = User.find(account.symbolize_keys[:id])
     arr = object.kind_of?(Array) ? object : [object]
     arr.each do |m|
       user.add_role(role, m).save
