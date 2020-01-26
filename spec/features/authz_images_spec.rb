@@ -4,21 +4,14 @@ RSpec.feature "AuthzImages", type: :feature, js: true do
   include_context "db_cleanup_each"
 
   let(:authenticated) { create_user }
-  let(:originator) { authenticated }
-  let(:image_props) { FactoryBot.attributes_for(:image) }
-  let(:images) { FactoryBot.create_list(:image, 3,
-                                        :with_caption,
-                                        :creator_id => originator[:id]) }
   let(:image) { images[0] }
 
-  def visit_images
-    images
-    visit "#{ui_path}/#/images/"
-    within("sd-image-selector") do
-      expect(page).to have_css(".image-list")
-      expect(page).to have_css(".image-list li", :count => images.count)
-    end
-  end
+  let(:originator) { create_user }
+  let(:organizer) { originator }
+  let(:admin) { apply_admin create_user }
+  let(:image_props) { FactoryBot.attributes_for(:image) }
+  let(:images) { FactoryBot.create_list(:image, 3, :with_caption, :with_roles, creator_id: originator) }
+  let(:image) { image[0] }
 
   shared_examples "can list images" do
     it "lists images" do
@@ -57,7 +50,7 @@ RSpec.feature "AuthzImages", type: :feature, js: true do
         end
         click_button("Create Image", :wait => 5)
         expect(page).to have_button("Clear Image", :wait => 5)
-        expect(page).to have_button("Delete Image")
+        expect(page).to have_button("Delete Image", :wait => 5)
         expect(page).to have_button("Update Image", :disabled => true)
         expect(page).to have_no_button("Create Image")
         click_button("Clear Image")
@@ -97,6 +90,14 @@ RSpec.feature "AuthzImages", type: :feature, js: true do
         expect(page).to have_field("image-caption", :with => "")
         expect(page).to have_no_button("Clear Image")
         expect(page).to have_no_css(".id", :text => image.id, :visible => false)
+      end
+    end
+  end
+  shared_examples "cannot update image" do
+    it "caption is not updatable" do
+      within("sd-image-editor .image-form") do
+        expect(page).to have_button("Clear Image")
+        expect(page).to have_field("image-caption", with: image.caption, readonly: true)
       end
     end
   end
@@ -158,7 +159,7 @@ RSpec.feature "AuthzImages", type: :feature, js: true do
     after(:each) { logout }
 
     context "unauthenticated user" do
-      before(:each) { logout; visit_images }
+      before(:each) { logout; visit_images images }
       it_behaves_like "can list images"
       it_behaves_like "displays correct buttons for role",
                       [],
@@ -172,6 +173,21 @@ RSpec.feature "AuthzImages", type: :feature, js: true do
                       ["Clear Image", "Update Image", "Delete Image"]
       it_behaves_like "can create image"
     end
+  end
+
+  context "organizer user" do
+    before(:each) { login organizer; visit_images images }
+    it_behaves_like "displays correct buttons for role",
+                    ["Create Image"],
+                    ["Clear Image", "update Image", "Delete Image"]
+    it_behaves_like "can create image"
+  end
+
+  context "admin user" do
+    before(:each) { login admin; visit_images images }
+    it_behaves_like "displays correct buttons for role",
+                    ["Create Image"], ["Clear Image", "Update Image", "Delete Image"]
+    it_behaves_like "can create image"
   end
 
   context "images posted" do
@@ -191,6 +207,8 @@ RSpec.feature "AuthzImages", type: :feature, js: true do
         it_behaves_like "displays correct buttons for role",
                         ["Clear Image"],
                         ["Create Image", "Update Image", "Delete Image"]
+        it_behaves_like "can clear image"
+        it_behaves_like "cannot update image"
       end
       context "authenticated user" do
         before(:each) { login authenticated; find(".image-controls") }

@@ -10,14 +10,14 @@ RSpec.feature "AuthzThingImages", type: :feature, :js => true do
   let(:thing_props) { FactoryBot.attributes_for(:thing) }
   let(:things) { FactoryBot.create_list(:thing, 3) }
   let(:images) { FactoryBot.create_list(:image, 3,
-                                         :creator_id => authenticated[:id]) }
+                                        :creator_id => authenticated[:id]) }
   let(:linked_thing) { things[0] }
   let(:linked_image) { images[0] }
   let(:thing_image) { FactoryBot.create(:thing_image,
-                                         :thing => linked_thing,
-                                         :image => linked_image,
-                                         :priority => 3,
-                                         :creator_id => member[:id]) }
+                                        :thing => linked_thing,
+                                        :image => linked_image,
+                                        :priority => 3,
+                                        :creator_id => member[:id]) }
   before(:each) do
     #touch these before we start
     thing_image
