@@ -3,7 +3,7 @@ module SubjectsUiHelper
     visit "#{ui_path}/#/images/"
     within("sd-image-selector") do
       expect(page).to have_css(".image-list")
-      expect(page).to have_css(".image-list li"), count: images.count, wait: 5
+      expect(page).to have_css(".image-list li", count: images.count, wait: 5)
     end
   end
 

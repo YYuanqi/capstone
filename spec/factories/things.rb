@@ -31,7 +31,7 @@ FactoryBot.define do
                     user_id: props.originator_id)
         Role.create(role_name: Role::MEMBER,
                     mname: Thing.name,
-                    mid: thing_id,
+                    mid: thing.id,
                     user_id: props.member_id) if props.member_id
       end
     end

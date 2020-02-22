@@ -53,7 +53,7 @@ class ThingPolicy < ApplicationPolicy
       scope.select("things.*, roles.role_name")
         .joins(join_clause)
         .tap do |scp|
-        scp.where("roles.role_name": [Role::MEMBER, Role::ORGANIZER]) if member_only
+        scp.where("roles.role_name": [Role::MEMBER, Role::ORGANIZER]) if members_only
       end
     end
   end
