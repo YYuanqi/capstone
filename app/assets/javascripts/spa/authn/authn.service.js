@@ -47,7 +47,7 @@
     }
 
     function getCurrentUserId() {
-      return service.user!=nul ? service.user.id :null
+      return service.user!=null ? service.user.id :null
     }
 
     function login(credentials) {
