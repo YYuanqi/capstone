@@ -21,6 +21,8 @@
 //= require spa/authn/authn_session/authn_session.component
 //= require spa/authn/authn_check/authn_check.directive
 
+//=require spa/authz/authz.module
+
 //= require spa/layout/layout.module
 //= require spa/layout/navbar/navbar.component
 

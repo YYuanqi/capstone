@@ -1,13 +1,14 @@
 (function () {
-	"use strict";
+  "use strict";
 
-	angular
-		.module("spa", [
-			"ui.router",
-			"spa.config",
-			"spa.authn",
-			"spa.layout",
-			"spa.subjects",
-			"spa.cities"
-		]);
+  angular
+    .module("spa", [
+      "ui.router",
+      "spa.config",
+      "spa.authn",
+      "spa.authz",
+      "spa.layout",
+      "spa.subjects",
+      "spa.cities"
+    ]);
 }());
