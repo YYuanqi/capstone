@@ -23,7 +23,7 @@
               ng-readonly="!$ctrl.authz.canUpdate"
               type="text"
               size="80"
-              maxlength="4000"></textarea>
+              maxlength="4000"/>
     <span class="invalid">{{$ctrl.item.errors.description}}</span>
   </div>
 
@@ -36,22 +36,19 @@
               ng-readonly="!$ctrl.authz.canUpdate"
               type="text"
               size="80"
-              maxlength="4000">
-    </textarea>
-
+              maxlength="4000"/>
     <span class="invalid">{{$ctrl.item.errors.notes}}</span>
   </div>
 
   <div class="thing-images row col-lg-12">
     <label class="col-xs-3">Related Images:</label>
     <ul class="thing-images col-xs-9">
-      <li ng-repeat="ti in $ctrl.images | orderBy: 'priority'">
+      <li ng-repeat="ti in $ctrl.images | orderBy:'priority'">
         <input type="checkbox"
                name="image-delete"
                ng-model="ti.toRemove"
                ng-show="$ctrl.authz.canRemoveImage"
                value="{{ti.id}}">
-
         <div class="image-delete glyphicon glyphicon-remove"
              ng-show="ti.toRemove"></div>
         <input type="number"
@@ -69,10 +66,11 @@
           <label class="image-caption"
                  ng-show="ti.image_caption">{{ti.image_caption}}</label>
           <label class="image-caption"
-                 ng-hide="ti.image_caption">(no caption {{ti.image_id}}</label>
+                 ng-hide="ti.image_caption">(no caption {{ti.image_id}})</label>
         </a>
       </li>
     </ul>
+    <span class="invalid">{{$ctrl.item.errors.images}}</span>
   </div>
 
   <div class="thing-controls"
@@ -85,29 +83,27 @@
     </button>
 
     <div ng-show="$ctrl.item.id">
-      <!--      <button name="thing-update"-->
-      <!--              type="submit"-->
-      <!--              ng-hide="!$ctrl.authz.canUpdate || !thingform.$dirty"-->
-      <!--              ng-disabled="thingform.$invalid || !thingform.$dirty"-->
-      <!--              ng-click="$ctrl.update()">Update Thing-->
-      <!--      </button>-->
       <span class="thing-modify"
-            data-ng-hide="!$ctrl.authz.canUpdate">
-        <button name="thing-update" type="submit"
+            data-ng-hide="!$ctrl.authz.canUpdate &&
+                          !$ctrl.authz.canUpdateImage &&
+                          !$ctrl.authz.canRemoveImage">
+        <button name="thing-update"
+                type="submit"
                 ng-disabled="thingform.$invalid || !thingform.$dirty"
-                data-ng-hide="$ctrl.haveDirtyLinks()
-                && !thingform['thing-name'].$dirty
-                && !thingform['thing-desc'].$dirty
-                && !thingform['thing-notes'].$dirty"
+                data-ng-hide="$ctrl.haveDirtyLinks() &&
+                  (!thingform['thing-name'].$dirty &&
+                   !thingform['thing-desc'].$dirty &&
+                   !thingform['thing-notes'].$dirty)"
                 ng-click="$ctrl.update()">Update Thing</button>
         <button name="thing-images-update"
                 type="submit"
-                data-ng-show="$ctrl.haveDirtyLinks()
-                && !thingform['thing-name'].$dirty
-                && !thingform['thing-desc'].$dirty
-                && !thingform['thing-notes'].$dirty"
+                data-ng-show="$ctrl.haveDirtyLinks() &&
+                  (!thingform['thing-name'].$dirty &&
+                   !thingform['thing-desc'].$dirty &&
+                   !thingform['thing-notes'].$dirty)"
                 ng-click="$ctrl.updateImageLinks()">Update Image Links</button>
       </span>
+
       <button name="thing-delete"
               type="submit"
               ng-show="$ctrl.authz.canDelete"
