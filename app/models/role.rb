@@ -1,7 +1,7 @@
 class Role < ActiveRecord::Base
   ADMIN = 'admin'
   ORIGINATOR = 'originator'
-  ORGANIZER = 'orgnizer'
+  ORGANIZER = 'organizer'
   MEMBER = 'member'
 
   belongs_to :user, inverse_of: :roles

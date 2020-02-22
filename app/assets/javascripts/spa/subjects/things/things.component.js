@@ -8,6 +8,9 @@
       controller: ThingEditorController,
       bindings: {
         authz: "<"
+      },
+      require: {
+        thingsAuthz: "^sdThingsAuthz"
       }
     })
     .component("sdThingSelector", {
@@ -18,7 +21,6 @@
       }
     })
   ;
-
 
   thingEditorTemplateUrl.$inject = ["spa.config.APP_CONFIG"];
 
@@ -67,6 +69,7 @@
     //////////////
     function newResource() {
       vm.item = new Thing();
+      vm.thingsAuthz.newItem(vm.item);
       return vm.item;
     }
 
@@ -145,6 +148,7 @@
       console.log("reloading thing", itemId);
       vm.images = ThingImage.query({thing_id: itemId});
       vm.item = Thing.get({id: itemId});
+      vm.thingsAuthz.newItem(vm.item);
       vm.images.$promise.then(
         function () {
           angular.forEach(vm.images, function (ti) {
