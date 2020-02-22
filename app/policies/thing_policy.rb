@@ -44,13 +44,14 @@ class ThingPolicy < ApplicationPolicy
       user_roles
     end
 
-    def user_roles member_only = true
-      join_type = member_only ? 'join' : 'left join'
-      join_claus = ["#{join_type} roles on roles.mname='Thing'",
+    def user_roles(members_only = true, allow_admin=true)
+      include_admin = allow_admin && @user && @user.is_admin?
+      member_join = members_only && !include_admin ? 'join' : 'left join'
+      join_clause = ["#{member_join} roles on roles.mname='Thing'",
                     "roles.mid=things.id",
                     "roles.user_id #{user_criteria}"].join(" and ")
       scope.select("things.*, roles.role_name")
-        .joins(join_claus)
+        .joins(join_clause)
         .tap do |scp|
         scp.where("roles.role_name": [Role::MEMBER, Role::ORGANIZER]) if member_only
       end
