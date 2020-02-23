@@ -1,4 +1,4 @@
-// SPA Demo JavaScript Manifest File
+// SPA JavaScript Manifest File
 //= require jquery
 //= require bootstrap
 //= require angular
@@ -21,19 +21,22 @@
 //= require spa/authn/authn_session/authn_session.component
 //= require spa/authn/authn_check/authn_check.directive
 
-//=require spa/authz/authz.module
-//=require spa/authz/authz.service
+//= require spa/authz/authz.module
+//= require spa/authz/authz.service
+//= require spa/authz/base_policy.service
 
 //= require spa/layout/layout.module
 //= require spa/layout/navbar/navbar.component
 
 //= require spa/subjects/subject.module
 //= require spa/subjects/images/images.service
+//= require spa/subjects/images/images_authz.service
 //= require spa/subjects/images/images.component
 //= require spa/subjects/images/images_authz.directive
 //= require spa/subjects/images/image_things.service
 //= require spa/subjects/images/image_linkable_things.service
 //= require spa/subjects/things/things.service
+//= require spa/subjects/things/things_authz.service
 //= require spa/subjects/things/thing_images.service
 //= require spa/subjects/things/things.component
 //= require spa/subjects/things/things_authz.directive

@@ -6,15 +6,15 @@
     .service("spa.authz.Authz", Authz);
 
   Authz.$inject = ["$rootScope", "$q",
-    "spa-demo.authn.Authn",
-    "spa-demo.authn.whoAmI"];
+    "spa.authn.Authn",
+    "spa.authn.whoAmI"];
 
   function Authz($rootScope, $q, Authn, whoAmI) {
     var service = this;
     service.user = null;        //holds result from server
     service.userPromise = null; //promise during server request
     service.admin = false;
-    service.originator = []
+    service.originator = [];
 
     service.getAuthorizedUser = getAuthorizedUser;
     service.getAuthorizedUserId = getAuthorizedUserId;
@@ -44,7 +44,7 @@
 
       service.admin = false;
       service.originator = [];
-      whoAmi.get().$promise.then(
+      whoAmI.get().$promise.then(
         function (response) {
           processUserRoles(response, deferred);
         },

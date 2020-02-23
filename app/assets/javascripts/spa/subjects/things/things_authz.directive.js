@@ -26,7 +26,7 @@
   }
 
   ThingAuthzController.$inject = ["$scope",
-    "spa-demo.subjects.ThingsAuthz"];
+    "spa.subjects.ThingsAuthz"];
   function ThingAuthzController($scope, ThingsAuthz) {
     var vm = this;
     vm.authz={};

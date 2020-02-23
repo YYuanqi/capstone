@@ -14,7 +14,7 @@
     service.isAuthenticated = isAuthenticated;
     service.getCurrentUserName = getCurrentUserName;
     service.getCurrentUser = getCurrentUser;
-    service.getCurrentUserId = getCurrentuserId;
+    service.getCurrentUserId = getCurrentUserId;
     service.login = login;
     service.logout = logout;
 

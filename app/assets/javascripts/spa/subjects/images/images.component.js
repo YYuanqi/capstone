@@ -21,13 +21,13 @@
       }
     });
 
-  imageSelectorTemplateUrl.$inject = ["spa-demo.config.APP_CONFIG"];
+  imageSelectorTemplateUrl.$inject = ["spa.config.APP_CONFIG"];
 
   function imageSelectorTemplateUrl(APP_CONFIG) {
     return APP_CONFIG.image_selector_html;
   }
 
-  imageEditorTemplateUrl.$inject = ["spa-demo.config.APP_CONFIG"];
+  imageEditorTemplateUrl.$inject = ["spa.config.APP_CONFIG"];
 
   function imageEditorTemplateUrl(APP_CONFIG) {
     return APP_CONFIG.image_editor_html;
@@ -35,8 +35,8 @@
 
   ImageSelectorController.$inject = ["$scope",
     "$stateParams",
-    "spa-demo.authz.Authz",
-    "spa-demo.subjects.Image"];
+    "spa.authz.Authz",
+    "spa.subjects.Image"];
 
   function ImageSelectorController($scope, $stateParams, Authz, Image) {
     var vm = this;
@@ -59,10 +59,10 @@
 
   ImageEditorController.$inject = ["$scope", "$q",
     "$state", "$stateParams",
-    "spa-demo.authz.Authz",
-    "spa-demo.subjects.Image",
-    "spa-demo.subjects.ImageThing",
-    "spa-demo.subjects.ImageLinkableThing",
+    "spa.authz.Authz",
+    "spa.subjects.Image",
+    "spa.subjects.ImageThing",
+    "spa.subjects.ImageLinkableThing",
   ];
 
   function ImageEditorController($scope, $q, $state, $stateParams,
