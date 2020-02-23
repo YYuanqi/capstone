@@ -1,6 +1,6 @@
 module UiHelper
   def create_user
-    user_props = FactoryBot.attributes_for(:user)
+    user_props = FactoryBot.attributes_for(:user);
     user = FactoryBot.create(:user, user_props)
     user_props.merge(:id => user.id, :uid => user.uid)
   end
@@ -16,7 +16,7 @@ module UiHelper
     fill_in("signup-password_confirmation", :with => password_confirm)
   end
 
-  def signup registration, success: true
+  def signup registration, success = true
     fillin_signup registration
     expect(page).to have_button("Sign Up", :disabled => false) if success
     click_on("Sign Up")
@@ -53,7 +53,7 @@ module UiHelper
     end
     expect(page).to have_css("#logout-form", :visible => false)
     expect(page).to have_css("#navbar-loginlabel", :text => /#{credentials[:name]}/)
-    credentials
+    return credentials
   end
 
   def logout
@@ -75,7 +75,7 @@ module UiHelper
         end
       end
     end
-    user
+    return user
   end
 
   def wait_until
@@ -88,12 +88,12 @@ module UiHelper
 
   def apply_admin account
     User.find(account.symbolize_keys[:id]).roles.create(:role_name => Role::ADMIN)
-    account
+    return account
   end
 
   def apply_originator account, model_class
     User.find(account.symbolize_keys[:id]).add_role(Role::ORIGINATOR, model_class).save
-    account
+    return account
   end
 
   def apply_role account, role, object
@@ -102,7 +102,7 @@ module UiHelper
     arr.each do |m|
       user.add_role(role, m).save
     end
-    account
+    return account
   end
 
   def apply_organizer account, object
@@ -112,4 +112,5 @@ module UiHelper
   def apply_member account, object
     apply_role(account, Role::MEMBER, object)
   end
+
 end
