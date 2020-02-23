@@ -11,7 +11,7 @@ RSpec.describe Role, type: :model do
       user.roles.create(role_name: Role::MEMBER, mname: 'State', mid: 1)
 
       db_user = User.find(user.id)
-      exepct(db_user.has_role([Role::ADMIN])).to be true
+      expect(db_user.has_role([Role::ADMIN])).to be true
       expect(db_user.has_role([Role::ORIGINATOR], 'City')).to be true
       expect(db_user.has_role([Role::ORIGINATOR], 'State')).to be false
       expect(db_user.has_role([Role::MEMBER], 'State', 1)).to be true
