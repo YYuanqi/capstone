@@ -34,6 +34,7 @@ group :development, :test do
   gem 'selenium-webdriver', '~> 2.53.4'
   gem 'chromedriver-helper', '~>1.0.0'
   gem 'launchy', '~>2.4.3'
+  gem 'simplecov', '~>0', '>=0.12', :require => false
 
   gem 'dotenv-rails', require: 'dotenv/rails-now'
 end
