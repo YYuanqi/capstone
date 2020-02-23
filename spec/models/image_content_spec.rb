@@ -72,7 +72,7 @@ RSpec.describe 'ImageContent', type: :model do
 
     it "sets size from EXIF" do
       expect(ic.width).to eq(ic.exif.width)
-      expect(ic.height).to eq(ic.exif.heitht)
+      expect(ic.height).to eq(ic.exif.height)
     end
 
     it "sets size manually" do
