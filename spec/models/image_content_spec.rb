@@ -89,13 +89,60 @@ RSpec.describe 'ImageContent', type: :model do
   end
 
   context 'valid image content' do
-    it 'requires image'
-    it 'requires content_type'
-    it 'requires content'
-    it 'requires width'
-    it 'requires height'
-    it 'requires supported content_type'
-    it 'checks content size maximum'
+    let(:ic) { ImageContent.new(image_id: 1, content_type: 'image/jpg', content: fin) }
+    before(:each) do
+      expect(ic.validate).to be true
+      expect(ic.errors.messages).to be_empty
+    end
+
+    it 'requires image' do
+      ic.image_id = nil
+      expect(ic.validate).to be false
+      expect(ic.errors.messages).to include(:image_id)
+    end
+
+    it 'requires content_type' do
+      ic.content_type = nil
+      expect(ic.validate).to be false
+      expect(ic.errors.messages).to include(:content_type)
+    end
+
+    it 'requires content' do
+      ic.content = nil
+      expect(ic.validate).to be false
+      expect(ic.errors.messages).to include(:content)
+    end
+
+    it 'requires width' do
+      ic.width = nil
+      expect(ic.validate).to be false
+      expect(ic.errors.messages).to include(:width)
+    end
+
+    it 'requires height' do
+      ic.width = nil
+      expect(ic.validate).to be false
+      expect(ic.errors.messages).to include(:width)
+    end
+
+    it 'requires supported content_type' do
+      ic.content_type = 'image/png'
+      expect(ic.validate).to be false
+      expect(ic.errors.messages).to include(:content_type)
+      expect(ic.errors.messages[:content_type]).to include(/png/)
+    end
+
+    it 'checks content size maximum' do
+      content = ''
+      decoded_pad = ic.content.data
+      begin
+        content += decoded_pad
+      end while content.size < ImageContent::MAX_CONTENT_SIZE
+      ic.content = Base64.encode64(ic.content.data)
+
+      expect(ic.validate).to be false
+      expect(ic.errors.messages).to include(:content)
+    end
   end
 
   context 'Image scaling' do
