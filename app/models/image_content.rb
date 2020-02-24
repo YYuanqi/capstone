@@ -33,7 +33,7 @@ class ImageContent
     end
   end
 
-  scope :image, ->(image) { where(image_id: image.id) if image }
+  scope :image, ->(image) { where(image_id: image.id) }
 
   def content=(value)
     if self[:content]
