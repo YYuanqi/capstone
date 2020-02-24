@@ -6,7 +6,7 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.11'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'mongoid', '~>7.0'
-gem 'rack-cors', '~>1.0.3', :require => 'rack/cors'
+gem 'rack-cors', '~>1.0.5', :require => 'rack/cors'
 gem 'pry-rails'
 gem 'jbuilder', '~>2.9'
 gem 'devise_token_auth', '~>0.1', '>=0.1.39'
