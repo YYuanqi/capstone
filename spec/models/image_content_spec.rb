@@ -127,6 +127,7 @@ RSpec.describe 'ImageContent', type: :model do
 
     it 'requires supported content_type' do
       ic.content_type = 'image/png'
+      ic.content=ic.content
       expect(ic.validate).to be false
       expect(ic.errors.messages).to include(:content_type)
       expect(ic.errors.messages[:content_type]).to include(/png/)
@@ -138,7 +139,7 @@ RSpec.describe 'ImageContent', type: :model do
       begin
         content += decoded_pad
       end while content.size < ImageContent::MAX_CONTENT_SIZE
-      ic.content = Base64.encode64(ic.content.data)
+      ic.content = Base64.encode64(content)
 
       expect(ic.validate).to be false
       expect(ic.errors.messages).to include(:content)

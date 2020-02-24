@@ -1,7 +1,8 @@
 require 'exifr/jpeg'
 class ImageContent
   include Mongoid::Document
-  CONTENT_TYPE = ['image/jpg', 'image/jpeg']
+  CONTENT_TYPES = ['image/jpg', 'image/jpeg']
+  MAX_CONTENT_SIZE = 10 * 1024 * 1024
 
   field :image_id, type: Integer
   field :width, type: Integer
@@ -10,10 +11,27 @@ class ImageContent
   field :content, type: BSON::Binary
   field :original, type: Mongoid::Boolean
 
+  validates_presence_of :image_id, :height, :width, :content_type, :content
+  validate :validate_width_height, :validate_content_length
+
+  def validate_width_height
+    if (!width || !height) && content
+      unless CONTENT_TYPES.include? content_type
+        errors.add(:content_type, "[#{content_type}] is not supported type: #{CONTENT_TYPES}")
+      end
+    end
+  end
+
+  def validate_content_length
+    if content && content.data.size > MAX_CONTENT_SIZE
+      errors.add(:content, "#{content.data.size} too large, greater than max #{MAX_CONTENT_SIZE}")
+    end
+  end
+
   def content=(value)
     if self[:content]
       self.width = nil
-      self.width = nil
+      self.height = nil
     end
 
     self[:content] = self.class.to_binary value
@@ -39,9 +57,10 @@ class ImageContent
   def exif
     if content
       case
-      when (CONTENT_TYPE.include? content_type)
+      when (CONTENT_TYPES.include? content_type)
         EXIFR::JPEG.new(StringIO.new(content.data))
       end
     end
   end
+
 end
