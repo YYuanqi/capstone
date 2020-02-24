@@ -12,6 +12,7 @@ gem 'jbuilder', '~>2.9'
 gem 'devise_token_auth', '~>0.1', '>=0.1.39'
 gem 'pundit', '~>1.1', '>=1.1.0'
 gem 'exifr', '~> 1.2', '>=1.2.5'
+gem 'mini_magick', '~>4.5', '>=4.5.1'
 
 gem 'sass-rails', '~>5.0'
 gem 'uglifier', '~>4.1'
