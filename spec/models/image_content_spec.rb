@@ -205,14 +205,16 @@ RSpec.describe 'ImageContent', type: :model do
 
   context 'Image scaling' do
     include_context 'db_scope'
-    let(:image) { FactoryBot.build(:iamge) }
+    let(:image) { FactoryBot.build(:image) }
     let(:image_content) { FactoryBot.build(:image_content) }
     before(:each) do
       expect(defined? ImageContentCreator).to eq('constant')
+      image.save # generate an ID for image saving content
     end
     after(:each) do
       expect(ImageContent.image(image).count).to eq(5)
-      expect(ImageContent.image(image).where(original: true).count).to eq(4)
+      expect(ImageContent.image(image).where(original: true).count).to eq(1)
+      expect(ImageContent.image(image).not.where(original: true).count).to eq(4)
     end
 
     it 'creates for Image with ImageContent' do
