@@ -1,10 +1,6 @@
 FactoryBot.define do
   factory :image_content do
-    image_id { "" }
-    width { "" }
-    height { "" }
-    content { "" }
-    content { "" }
-    original { "" }
+    content_type { "image/jpg" }
+    content { File.open('db/images/sample.jpg', 'rb') { |f| Base64.encode64(f.read) } }
   end
 end
