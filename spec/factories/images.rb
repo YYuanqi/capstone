@@ -8,6 +8,10 @@ FactoryBot.define do
       image.image_content = FactoryBot.build(:image_content, image.image_content) if image.image_content
     end
 
+    after(:create) do |image|
+      ImageContentCreator.new(image).build_contents.save! if image.image_content
+    end
+
     trait :with_caption do
       caption { Faker::Lorem.sentence(1).chomp('.') }
     end
