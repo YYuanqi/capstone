@@ -31,10 +31,14 @@ class ImagesController < ApplicationController
 
     User.transaction do
       if @image.save
-        role = current_user.add_role(Role::ORGANIZER, @image)
-        @image.user_roles << role.role_name
-        role.save!
-        render :show, status: :created, location: @image
+        original = ImageContent.new(image_content_params)
+        contents = ImageContentCreator.new(@image, original).build_contents
+        if contents.save!
+          role = current_user.add_role(Role::ORGANIZER, @image)
+          @image.user_roles << role.role_name
+          role.save!
+          render :show, status: :created, location: @image
+        end
       else
         render json: @image.errors, status: :unprocessable_entity
       end
@@ -71,4 +75,12 @@ class ImagesController < ApplicationController
   def image_params
     params.require(:image).permit(:caption, :creator_id)
   end
+
+  def image_content_params
+    params.require(:image_content).tap do |ic|
+      ic.require(:content_type)
+      ic.require(:content)
+    end.permit(:content_type, :content)
+  end
+
 end
