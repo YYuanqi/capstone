@@ -251,6 +251,7 @@ RSpec.describe "ImageContents", type: :request do
       get image_content_url(@image)
       expect(response).to have_http_status(:ok)
       expect(response.header["ETag"]).to_not be_nil
+      pp response.header
       expect(response.header["ETag"]).to eq(%("#{Digest::MD5.hexdigest(ic.cache_key)}"))
     end
 
@@ -263,7 +264,7 @@ RSpec.describe "ImageContents", type: :request do
 
       #now check the cached path
       etag = response.headers["ETag"]
-      get image_content_url(@image), nil, {"If-None-Match" => etag}
+      get image_content_url(@image), headers: {"If-None-Match" => etag}
       expect(response.header["Cache-Control"]).to include("max-age=#{1.year.to_int}, public")
     end
 
@@ -272,7 +273,7 @@ RSpec.describe "ImageContents", type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.body.size).to eq(ic.content.data.size)
 
-      get image_content_url(@image), nil, {"If-None-Match" => "blah blah"}
+      get image_content_url(@image), headers: {"If-None-Match" => "blah blah"}
       expect(response).to have_http_status(:ok)
       expect(response.body.size).to eq(ic.content.data.size)
     end
@@ -283,7 +284,7 @@ RSpec.describe "ImageContents", type: :request do
       expect(response.body.size).to eq(ic.content.data.size)
       etag = response.headers["ETag"]
 
-      get image_content_url(@image), nil, {"If-None-Match" => etag}
+      get image_content_url(@image), headers: {"If-None-Match" => etag}
       #pp response.status
       #pp response.headers
       expect(response).to have_http_status(:not_modified)
@@ -297,15 +298,15 @@ RSpec.describe "ImageContents", type: :request do
       expect(response.body.size).to eq(ic.content.data.size)
       etag = response.headers["ETag"]
 
-      get image_content_url(@image, :width => 100), nil, {"If-None-Match" => etag}
+      get image_content_url(@image, :width => 100), headers: {"If-None-Match" => etag}
       expect(response).to have_http_status(:ok)
       expect(response.body.size).to eq(image_content.smallest(100).first.content.data.size)
 
-      get image_content_url(@image), nil, {"If-None-Match" => etag}
+      get image_content_url(@image), headers: {"If-None-Match" => etag}
       expect(response).to have_http_status(:not_modified)
       expect(response.body.size).to eq(0)
 
-      get image_content_url(@image, :width => 800), nil, {"If-None-Match" => etag}
+      get image_content_url(@image, :width => 800), headers: {"If-None-Match" => etag}
       expect(response).to have_http_status(:ok)
       expect(response.body.size).to eq(image_content.smallest(800).first.content.data.size)
     end

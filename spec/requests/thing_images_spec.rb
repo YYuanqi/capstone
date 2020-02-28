@@ -34,8 +34,7 @@ RSpec.describe "ThingImages", type: :request do
         expect(response).to have_http_status(:bad_request)
         payload = parsed_body
         expect(payload).to include("errors")
-        expect(payload["errors"]["full_messages"]).to match(/param/)
-        expect(payload["errors"]["full_messages"]).to match(/missing/)
+        expect(payload["errors"]["full_messages"]).to include(/param/, /missing/)
       end
     end
   end

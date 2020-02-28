@@ -28,7 +28,7 @@ class ApplicationController < ActionController::API
     end
 
     def missing_parameter(exception)
-      full_message_error exception.message, :bad_request
+      full_message_error [exception.message], :bad_request
       Rails.logger.debug exception.message
     end
 
