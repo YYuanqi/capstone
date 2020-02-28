@@ -75,7 +75,9 @@ class ImagesController < ApplicationController
   # DELETE /images/1.json
   def destroy
     authorize @image
+    ImageContent.image(@image).delete_all
     @image.destroy
+    head :no_content
   end
 
   private
