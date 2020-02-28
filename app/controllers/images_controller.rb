@@ -5,6 +5,8 @@ class ImagesController < ApplicationController
   after_action :verify_authorized, except: %i(content)
   after_action :verify_policy_scoped, only: %i(index)
 
+  rescue_from EXIFR::MalformedJPEG, with: :contents_error
+
   # GET /images
   # GET /images.json
   def index
@@ -99,4 +101,18 @@ class ImagesController < ApplicationController
     end.permit(:content_type, :content)
   end
 
+  def contents_error(exception)
+    full_message_error([exception.message, 'unable to create image contents'], :unprocessable_entity)
+    Rails.logger.debug exception.message
+  end
+
+  def mongoid_validate_error(exception)
+    payload = {
+      errors: exception.record.errors.messages
+                .slice(:content_type, :content, :full_messages)
+                .merge(full_messages: ['unable to create image contents']),
+    }
+    render json: payload, status: :unprocessable_entity
+    Rails.logger.debug exception
+  end
 end
