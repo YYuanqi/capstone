@@ -16,7 +16,7 @@ class ImageContent
   field :content, type: BSON::Binary
   field :original, type: Mongoid::Boolean
 
-  index({image_id:1, width:1, height:1}, {name: 'fdx_image_size'})
+  index({image_id: 1, width: 1, height: 1}, {name: 'fdx_image_size'})
 
   validates_presence_of :image_id, :height, :width, :content_type, :content
   validate :validate_width_height, :validate_content_length
@@ -82,4 +82,7 @@ class ImageContent
     end
   end
 
+  def suffix
+    'ipg' if CONTENT_TYPES.include?(content_type)
+  end
 end
