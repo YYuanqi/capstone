@@ -16,7 +16,7 @@ module UiHelper
     fill_in("signup-password_confirmation", :with => password_confirm)
   end
 
-  def signup registration, success = true
+  def signup registration, success: true
     fillin_signup registration
     expect(page).to have_button("Sign Up", :disabled => false) if success
     click_on("Sign Up")
