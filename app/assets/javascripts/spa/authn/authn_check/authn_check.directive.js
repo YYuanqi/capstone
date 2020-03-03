@@ -16,7 +16,6 @@
       scope: false,
       link: link
     };
-
     return directive;
 
     function link(scope, element, attrs) {
@@ -38,6 +37,7 @@
 
     return;
 
+    //////////////
     function getClientUser() {
       vm.client.currentUser = $auth.user;
     }
@@ -50,7 +50,8 @@
         },
         function (value) {
           vm.server.whoAmI = value;
-        });
+        }
+      );
     }
 
     function checkServerUser() {
@@ -62,7 +63,7 @@
         function (value) {
           vm.server.checkMe = value;
         }
-      )
+      );
     }
   }
 })();
