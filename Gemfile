@@ -55,5 +55,8 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-angular-resource', '~>1.5.9'
   gem 'rails-assets-ng-token-auth', '~>0.0', '>=0.0.27'
   gem 'rails-assets-angular-cookie'
+  gem 'rails-assets-ng-file-upload', '~>12.2', '>=12.2.11'
+  gem 'rails-assets-ng-file-upload-shim'
+  gem 'rails-assets-ui-cropper', '~>1.0', '>=1.0.4'
 end
 
