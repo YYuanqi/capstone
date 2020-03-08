@@ -2,9 +2,9 @@
   <div class="image-items"
        ng-repeat="image in $ctrl.images">
 
-    <span class="id image_id"></span>
+    <span class="id image_id">{{$ctrl.imageId(image)}}}</span>
     <img class="responsive"
-         ng-src="">
+         ng-src="{{$ctrl.imageUrl(image)}}">
 
   </div>
 </div>
