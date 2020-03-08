@@ -2,7 +2,7 @@
   "use strict";
 
   angular
-    .module("spa-demo.layout")
+    .module("spa.layout")
     .component("sdImageLoader", {
       templateUrl: templateUrl,
       controller: ImageLoaderController,
@@ -13,7 +13,7 @@
     });
 
 
-  templateUrl.$inject = ["spa-demo.config.APP_CONFIG"];
+  templateUrl.$inject = ["spa.config.APP_CONFIG"];
 
   function templateUrl(APP_CONFIG) {
     return APP_CONFIG.image_loader_html;
@@ -38,7 +38,7 @@
         });
       // $scope.$watch(function(){ return vm.file },
       //               function(){ makeObjectUrl(); makeDataUri(); });
-    };t
+    };
     return;
     //////////////
     // function makeDataUri() {
