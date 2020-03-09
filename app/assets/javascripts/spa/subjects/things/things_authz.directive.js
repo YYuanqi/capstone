@@ -30,8 +30,6 @@
     vm.authz = {};
     vm.authz.canUpdateItem = canUpdateItem;
     vm.newItem = newItem;
-    console.log(1231231231)
-
     activate();
     return;
 

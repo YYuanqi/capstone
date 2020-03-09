@@ -323,7 +323,7 @@ RSpec.feature "AuthzThingImages", type: :feature, :js=>true do
     before(:each) { visit_thing linked_thing }
 
     it "can remove link to image" do
-      expect(ThingImage.where(:id=>linked_image.id)).to exist
+      expect(ThingImage.where(:id=>linked_image.id).first).to be(true)
       within ("sd-thing-editor .thing-form") do
         expect(page).to have_css(".thing-images ul li",:text=>displayed_caption(linked_image))
 
