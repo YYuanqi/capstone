@@ -18,7 +18,7 @@
 
     //override and add additional methods
     ThingsAuthz.prototype.canQuery=function() {
-      //console.log("ThingsAuthz.canQuery");
+      console.log("ThingsAuthz.canQuery");
       return Authz.isAuthenticated();
     };
 

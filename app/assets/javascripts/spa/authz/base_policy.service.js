@@ -36,7 +36,6 @@
       if (!item) {
         return false;
       } else {
-        console.log(1,item)
         return !item.id ? this.canCreate() : Authz.isOrganizer(item);
       }
     };

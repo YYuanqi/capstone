@@ -8,7 +8,7 @@
       controller: ImageSelectorController,
       bindings: {
         authz: "<"
-      }
+      },
     })
     .component("sdImageEditor", {
       templateUrl: imageEditorTemplateUrl,
@@ -20,6 +20,7 @@
         imagesAuthz: "^sdImagesAuthz"
       }
     });
+
 
   imageSelectorTemplateUrl.$inject = ["spa.config.APP_CONFIG"];
 
@@ -60,13 +61,14 @@
   ImageEditorController.$inject = ["$scope", "$q",
     "$state", "$stateParams",
     "spa.authz.Authz",
+    "spa.layout.DataUtils",
     "spa.subjects.Image",
     "spa.subjects.ImageThing",
     "spa.subjects.ImageLinkableThing",
   ];
 
   function ImageEditorController($scope, $q, $state, $stateParams,
-                                 Authz, Image, ImageThing, ImageLinkableThing) {
+                                 Authz, DataUtils, Image, ImageThing, ImageLinkableThing) {
     var vm = this;
     vm.selected_linkables = [];
     vm.create = create;
@@ -74,6 +76,7 @@
     vm.update = update;
     vm.remove = remove;
     vm.linkThings = linkThings;
+    vm.setImageContent = setImageContent;
 
     vm.$onInit = function () {
       console.log("ImageEditorController", $scope);
@@ -87,7 +90,7 @@
             newResource();
           }
         });
-    }
+    };
     return;
 
     //////////////
@@ -110,8 +113,16 @@
     }
 
     function clear() {
-      newResource();
-      $state.go(".", {id: null});
+      if (!vm.item.id) {
+        $state.reload();
+      } else {
+        $state.go(".", {id: null});
+      }
+    }
+
+    function setImageContent(dataUri) {
+      console.log("setImageContent", dataUri ? dataUri.length : null);
+      vm.item.image_content = DataUtils.getContentFromDataUri(dataUri);
     }
 
     function create() {
@@ -166,7 +177,7 @@
         vm.item["errors"] = response.data.errors;
       }
       if (!vm.item.errors) {
-        vm.item["errors"] = {}
+        vm.item["errors"] = {};
         vm.item["errors"]["full_messages"] = [response];
       }
       $scope.imageform.$setPristine();

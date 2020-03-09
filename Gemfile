@@ -11,6 +11,8 @@ gem 'pry-rails'
 gem 'jbuilder', '~>2.9'
 gem 'devise_token_auth', '~>0.1', '>=0.1.39'
 gem 'pundit', '~>1.1', '>=1.1.0'
+gem 'exifr', '~> 1.2', '>=1.2.5'
+gem 'mini_magick', '~>4.5', '>=4.5.1'
 
 gem 'sass-rails', '~>5.0'
 gem 'uglifier', '~>4.1'
@@ -33,6 +35,7 @@ group :development, :test do
   gem 'selenium-webdriver', '~> 2.53.4'
   gem 'chromedriver-helper', '~>1.0.0'
   gem 'launchy', '~>2.4.3'
+  gem 'simplecov', '~>0', '>=0.12', :require => false
 
   gem 'dotenv-rails', require: 'dotenv/rails-now'
 end
@@ -45,12 +48,16 @@ end
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-source 'https://rails-assets.org' do
+# source 'https://rails-assets.org' do
+source 'http://insecure.rails-assets.org' do
   gem 'rails-assets-bootstrap', '~>3.3', '>= 3.3.7'
   gem 'rails-assets-angular', '~>1.5.9'
   gem 'rails-assets-angular-ui-router', '~>0.3', '>=0.3.1'
   gem 'rails-assets-angular-resource', '~>1.5.9'
   gem 'rails-assets-ng-token-auth', '~>0.0', '>=0.0.27'
   gem 'rails-assets-angular-cookie'
+  gem 'rails-assets-ng-file-upload', '~>12.2', '>=12.2.11'
+  gem 'rails-assets-ng-file-upload-shim'
+  gem 'rails-assets-ui-cropper', '~>1.0', '>=1.0.4'
 end
 

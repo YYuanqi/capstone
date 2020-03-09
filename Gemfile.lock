@@ -1,6 +1,6 @@
 GEM
   remote: https://rubygems.org/
-  remote: https://rails-assets.org/
+  remote: http://insecure.rails-assets.org/
   specs:
     actioncable (5.2.3)
       actionpack (= 5.2.3)
@@ -88,12 +88,14 @@ GEM
       devise (> 3.5.2, < 4.5)
       rails (< 6)
     diff-lcs (1.3)
+    docile (1.3.2)
     dotenv (2.7.5)
     dotenv-rails (2.7.5)
       dotenv (= 2.7.5)
       railties (>= 3.2, < 6.1)
     erubi (1.8.0)
     execjs (2.7.0)
+    exifr (1.3.6)
     factory_bot (5.0.2)
       activesupport (>= 4.2.0)
     factory_bot_rails (5.0.2)
@@ -134,6 +136,7 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2019.0331)
     mimemagic (0.3.3)
+    mini_magick (4.10.1)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.11.3)
@@ -200,9 +203,16 @@ GEM
     rails-assets-bootstrap (3.4.1)
       rails-assets-jquery (>= 1.9.1, < 4)
     rails-assets-jquery (3.4.1)
+    rails-assets-ng-file-upload (12.2.13)
+      rails-assets-angular (> 1.2.0)
+    rails-assets-ng-file-upload-shim (12.2.13)
+      rails-assets-angular (> 1.2.0)
+      rails-assets-ng-file-upload (> 6.0.3)
     rails-assets-ng-token-auth (0.0.27)
       rails-assets-angular (>= 1.2.0)
       rails-assets-angular-cookie (>= 4.0.6)
+    rails-assets-ui-cropper (1.0.6)
+      rails-assets-angular (>= 1.4.0)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
@@ -259,6 +269,10 @@ GEM
       childprocess (~> 0.5)
       rubyzip (~> 1.0)
       websocket (~> 1.0)
+    simplecov (0.18.3)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+    simplecov-html (0.12.1)
     spring (2.1.0)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -298,6 +312,7 @@ DEPENDENCIES
   database_cleaner (~> 1.5, >= 1.5.3)
   devise_token_auth (~> 0.1, >= 0.1.39)
   dotenv-rails
+  exifr (~> 1.2, >= 1.2.5)
   factory_bot_rails
   faker
   httparty (~> 0.17, >= 0.17.0)
@@ -305,6 +320,7 @@ DEPENDENCIES
   jquery-rails (~> 4.2, >= 4.2.1)
   launchy (~> 2.4.3)
   listen (>= 3.0.5, < 3.2)
+  mini_magick (~> 4.5, >= 4.5.1)
   mongoid (~> 7.0)
   mongoid-rspec (~> 4.0.0)
   pg (>= 0.18, < 2.0)
@@ -320,10 +336,14 @@ DEPENDENCIES
   rails-assets-angular-resource (~> 1.5.9)!
   rails-assets-angular-ui-router (~> 0.3, >= 0.3.1)!
   rails-assets-bootstrap (~> 3.3, >= 3.3.7)!
+  rails-assets-ng-file-upload (~> 12.2, >= 12.2.11)!
+  rails-assets-ng-file-upload-shim!
   rails-assets-ng-token-auth (~> 0.0, >= 0.0.27)!
+  rails-assets-ui-cropper (~> 1.0, >= 1.0.4)!
   rspec-rails (~> 3.6)
   sass-rails (~> 5.0)
   selenium-webdriver (~> 2.53.4)
+  simplecov (~> 0, >= 0.12)
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data
