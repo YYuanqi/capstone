@@ -61,7 +61,9 @@ RSpec.feature "AuthzThingImages", type: :feature, :js => true do
         expect(page).to have_css("sd-image-editor")
         link_selector_args = ["sd-image-editor ul.image-things span.thing_id",
                               {:text => linked_thing.id, :visible => false, :wait => 5}]
+
         image_editor_loaded! linked_image
+
 
         #extend timeouts for an extensive amount of concurrent, async activity
         using_wait_time 5 do
@@ -333,7 +335,9 @@ RSpec.feature "AuthzThingImages", type: :feature, :js => true do
           find_field("image-delete").set(true)
         end
         button = "Update Image Links"
+
         expect(page).to have_button(button, :disabled => false, :wait => 10)
+
         click_button(button)
         # wait for page to refresh
         expect(page).to have_no_button(button, :wait => 5)
