@@ -62,6 +62,9 @@ RSpec.feature "AuthzThingImages", type: :feature, :js => true do
         link_selector_args = ["sd-image-editor ul.image-things span.thing_id",
                               {:text => linked_thing.id, :visible => false, :wait => 5}]
 
+        image_editor_loaded! linked_image
+
+
         #extend timeouts for an extensive amount of concurrent, async activity
         using_wait_time 5 do
           #wait for the link to show up and then click
@@ -332,16 +335,21 @@ RSpec.feature "AuthzThingImages", type: :feature, :js => true do
           find_field("image-delete").set(true)
         end
         button = "Update Image Links"
-        expect(page).to have_button(button, :disabled => false)
+
+        expect(page).to have_button(button, :disabled => false, :wait => 10)
+
         click_button(button)
         # wait for page to refresh
-        expect(page).to have_no_button(button)
+        expect(page).to have_no_button(button, :wait => 5)
 
         #link should no longer be displayed
         expect(page).to have_no_css(".thing-images ul li",
                                     :text => displayed_caption(linked_image))
         #link is removed from database
         expect(ThingImage.where(:id => linked_image.id)).to_not exist
+
+        expect(page).to have_css(".thing-images ul li",
+                                 :count => ThingImage.where(:thing => linked_thing).count)
       end
     end
 
@@ -406,6 +414,7 @@ RSpec.feature "AuthzThingImages", type: :feature, :js => true do
         expect(page).to have_css(".thing-form")
         expect(page).to have_no_field("image-delete")
       end
+      thing_editor_loaded! linked_thing
     end
 
     it "does not display update (links) button" do
