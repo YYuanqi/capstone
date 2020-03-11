@@ -26,7 +26,7 @@ class ImagesController < ApplicationController
         send_data result.content.data, options
       end
     else
-      render nothing: true, status: :not_found
+      head :not_found
     end
   end
 

@@ -28,7 +28,7 @@ FactoryBot.define do
 
     trait :with_roles do
       after(:create) do |image|
-        Role.create(role_name: Role::ORIGINATOR,
+        Role.create(role_name: Role::ORGANIZER,
                     mname: Image.name,
                     mid: image.id,
                     user_id: image.creator_id)
