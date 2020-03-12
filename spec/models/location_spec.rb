@@ -29,13 +29,13 @@ RSpec.describe 'Location', type: :model do
 
   context "Location Factories" do
     context "Point Factory" do
-      subject { FactoryGirl.build(:point) }
+      subject { FactoryBot.build(:point) }
       it { expect(subject.lng).to be_a Float }
       it { expect(subject.lat).to be_a Float }
     end
 
     context "Address Factory" do
-      subject { FactoryGirl.build(:postal_address) }
+      subject { FactoryBot.build(:postal_address) }
       it { expect(subject.street_address).to be_a String }
       it { expect(subject.city).to be_a String }
       it { expect(subject.state_code).to be_a String }
@@ -44,7 +44,7 @@ RSpec.describe 'Location', type: :model do
     end
 
     context "Location Factory" do
-      subject { FactoryGirl.build(:location) }
+      subject { FactoryBot.build(:location) }
       it { expect(subject.formatted_address).to be_a String }
       it { expect(subject.position).to be_a Point }
       it { expect(subject.address).to be_a PostalAddress }
