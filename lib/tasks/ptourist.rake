@@ -61,7 +61,7 @@ namespace :ptourist do
 
   def create_image organizer, img
     puts "building image for #{img[:caption]}, by #{organizer.name}"
-    image = Image.create(:creator_id => organizer.id, :caption => img[:caption])
+    image = Image.create(:creator_id => organizer.id, :caption => img[:caption], :lng => img[:lng], :lat => img[:lat])
     organizer.add_role(Role::ORGANIZER, image).save
     create_image_content img.merge(:image => image)
   end
@@ -89,7 +89,7 @@ namespace :ptourist do
     puts "added members for #{thing.name}: #{first_names(m)}"
     images.each do |img|
       puts "building image for #{thing.name}, #{img[:caption]}, by #{organizer.name}"
-      image = Image.create(:creator_id => organizer.id, :caption => img[:caption])
+      image = Image.create(:creator_id => organizer.id, :caption => img[:caption], :lng => img[:lng], :lat => img[:lat])
       organizer.add_role(Role::ORGANIZER, image).save
       ThingImage.new(:thing => thing, :image => image,
                      :creator_id => organizer.id)
