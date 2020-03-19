@@ -125,4 +125,112 @@ RSpec.describe "Image Geolocation", type: :model do
       expect(near.primary).to_not be_nil
     end
   end
+
+  context "ThingImage geo queries" do
+    include_context "db_clean_all"
+    let(:origin) { Point.new(0, 0) }
+    let(:sample) { ThingImage.first }
+    before(:all) do
+      orphan_thing = FactoryBot.create(:thing, :name => "orphan")
+      orphan_image = FactoryBot.create(:image, caption: "orphan",
+                                       image_content: nil,
+                                       position: Point.new(0, 1))
+      #primary and secondary images
+      (0..2).each do |idx|
+        thing = FactoryBot.create(:thing)
+        (0..1).each do |priority|
+          image = FactoryBot.create(:image,
+                                    caption: (priority == 0) ? "priority" : "secondary",
+                                    image_content: nil,
+                                    position: Point.new(0, idx))
+          FactoryBot.create(:thing_image,
+                            :thing => thing,
+                            :image => image,
+                            :priority => priority)
+        end
+      end
+    end
+
+    it "supplies Image and Thing info" do
+      result = ThingImage.where(id: sample.id)
+                 .with_name
+                 .with_caption
+                 .with_position
+                 .first
+      expect(result).to_not be_nil
+      expect(result.thing_id).to eq(sample.thing.id)
+      expect(result.thing_name).to eq(sample.thing.name)
+      expect(result.image_id).to eq(sample.image.id)
+      expect(result.image_caption).to eq(sample.image.caption)
+      expect(result.lng).to eq(sample.image.lng)
+      expect(result.lat).to eq(sample.image.lat)
+    end
+
+    it "returns ThingImages for Things and primary Image" do
+      things = ThingImage.within_range(origin).things
+      expect(things.size).to eq(3)
+      things.each do |ti|
+        expect(ti.priority).to eq(0)
+        expect(ti.thing_id).to_not be_nil
+        expect(ti.image_id).to_not be_nil
+      end
+    end
+
+    it "returns ThingImages for orphan Images" do
+      orphan_images = ThingImage.within_range(origin)
+                        .where(:thing => nil)
+                        .with_caption
+      expect(orphan_images.size).to eq(1)
+      orphan_images.each do |ti|
+        expect(ti.thing_id).to be_nil
+        expect(ti.priority).to be_nil
+        expect(ti.image_id).to_not be_nil
+        expect(ti.image_caption).to_not be_nil
+      end
+    end
+
+    it "supplies distance" do
+      results = ThingImage.with_distance(origin, ThingImage.all)
+      results.each do |ti|
+        expect(ti).to respond_to(:distance)
+        expect(ti.distance).to be_between(69 * ti.lat, 70 * ti.lat)
+      end
+    end
+
+    it "returns all ThingImages without limit" do
+      results = ThingImage.with_distance(origin, ThingImage.within_range(origin, nil))
+      expect(results.size).to eq((3 * 2) + 1) #two assigned images and image orphan
+    end
+
+    it "returns ThingImages within limit" do
+      results = ThingImage.with_distance(origin, ThingImage.within_range(origin, 70))
+      expect(results.size).to eq(5)
+      results.each do |ti|
+        #pp "distance=#{ti.distance}"
+        expect(ti.distance).to be < 70
+      end
+    end
+
+    it "orders ThingImages by distance ASC" do
+      results = ThingImage.with_distance(origin, ThingImage.within_range(origin, nil, false))
+      expect(results.size).to eq((3 * 2) + 1)
+      last_distance = -1
+      results.each do |ti|
+        #pp "distance=#{ti.distance}"
+        expect(ti.distance).to be >= last_distance
+        last_distance = ti.distance
+      end
+    end
+
+    it "orders ThingImages by distance DESC" do
+      results = ThingImage.within_range(origin, nil, true)
+      expect(results.size).to eq(3 * 2 + 1)
+      last_distance = 69 * 90
+      results.each do |ti|
+        expect(distance = ti.distance_from(origin)).to be <= last_distance
+        last_distance = distance
+        #pp "distance=#{distance}"
+      end
+    end
+  end
 end
