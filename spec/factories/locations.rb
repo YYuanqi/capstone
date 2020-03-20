@@ -21,7 +21,7 @@ FactoryBot.define do
       country_code { 'US' }
     end
 
-    initialize_with { PostAddress.new(street_address, city, state_code, zip, country_code) }
+    initialize_with { PostalAddress.new(street_address, city, state_code, zip, country_code) }
 
     trait :jhu do
       street_address { '3400 North Charles Street' }
@@ -39,7 +39,7 @@ FactoryBot.define do
       street_no = address.street_address.match(/^(\d+)/)[1]
       "#{street_no} N Charles St, Baltimore, MD 21218, USA"
     }
-    initialize_with { Location.new(formmated_address, position, address) }
+    initialize_with { Location.new(formatted_address, position, address) }
 
     trait :jhu do
       address { FactoryBot.build(:postal_address, :jhu) }
