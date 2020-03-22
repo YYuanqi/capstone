@@ -23,7 +23,7 @@ RSpec.describe 'Geocoders', type: :request do
       it 'locates location by position' do
         loc = geocoder.reverse_geocode search_position
         expect(loc.formatted_address).to eq(jhu.formatted_address)
-        expect(loc.position == jhu.position).to be true
+        expect(loc.position === jhu.position).to be true
         expect(loc.address).to eq(jhu.address)
         expect(loc).to eq(jhu)
       end

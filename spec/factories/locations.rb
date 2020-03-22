@@ -8,7 +8,7 @@ FactoryBot.define do
 
     trait :jhu do
       lng { -76.620464 }
-      lng { 39.3304957 }
+      lat { 39.3304957 }
     end
   end
 
@@ -43,7 +43,7 @@ FactoryBot.define do
 
     trait :jhu do
       address { FactoryBot.build(:postal_address, :jhu) }
-      position { FactoryBot.build(:postal, :jhu) }
+      position { FactoryBot.build(:point, :jhu) }
     end
   end
 end

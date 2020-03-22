@@ -9,7 +9,7 @@ class Location
 
   def ==(rhs)
     !rhs ? false : (formatted_address == rhs.formatted_address &&
-      position == rhs.position &&
+      position === rhs.position &&
       address == rhs.address)
   end
 
