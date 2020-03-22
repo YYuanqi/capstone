@@ -41,17 +41,17 @@ RSpec.describe 'Geocoders', type: :request do
         expect(payload).to include('formatted_address' => geo.formatted_address)
         expect(payload).to include('position' => geo.position.to_hash.stringify_keys)
         expect(payload).to include('address' => geo.address.to_hash.stringify_keys)
-        expect(response.header['Cache-Control'].match(/max-age=(\d+),/)).to include('86400')
+        expect(response.header['Cache-Control'].match(/max-age=(\d+),/)[1]).to include('86400')
       end
 
       it 'locates location by position' do
-        jget gecoder_positions_path, search_position.to_hash
+        jget geocoder_positions_path, search_position.to_hash
         expect(response).to have_http_status(:ok)
         payload = parsed_body
         expect(payload).to include('formatted_address' => geo.formatted_address)
         expect(payload).to include('position' => geo.position.to_hash.stringify_keys)
         expect(payload).to include('address' => geo.address.to_hash.stringify_keys)
-        expect(response.header['Cache-Control'].match(/max-age=(\d+),/)).to include('86400')
+        expect(response.header['Cache-Control'].match(/max-age=(\d+),/)[1]).to include('86400')
       end
     end
   end
