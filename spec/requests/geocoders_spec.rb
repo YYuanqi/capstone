@@ -55,4 +55,35 @@ RSpec.describe 'Geocoders', type: :request do
       end
     end
   end
+
+  context 'geocode cache' do
+    include_context 'db_scope'
+    let(:geocoder_cache) { GeocoderCache.new(Geocoder.new) }
+    before(:each) do
+      expect(CachedLocation.by_address(search_address).count).to be <= 1
+      expect(CachedLocation.by_address(search_position).count).to be <= 1
+    end
+
+    context 'service' do
+      it 'caches location by address' do
+        expect(result = geocoder_cache.geocode(search_address)).to_not be_nil
+        expect(CachedLocation.by_address(search_address).count).to eq(1)
+
+        3.times do
+          expect(geocoder_cache.reverse_geocode(search_address)[1].id).to eq(result[1].id)
+          expect(CachedLocation.by_address(search_address).count).to eq(1)
+        end
+      end
+      
+      it 'caches location by position' do
+        expect(result = geocoder_cache.geocode(search_position)).to_not be_nil
+        expect(CachedLocation.by_position(search_position).count).to eq(1)
+
+        3.times do
+          expect(geocoder_cache.reverse_geocode(search_address)[1].id).to eq(result[1].id)
+          expect(CachedLocation.by_position(search_position).count).to eq(1)
+        end
+      end
+    end
+  end
 end
