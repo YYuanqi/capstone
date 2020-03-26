@@ -18,18 +18,18 @@ class CachedLocation
         {name: 'idx_loc_address', expire_after_seconds: 86400})
 
   scope :by_address, ->(address) { where(address: normalize(address)) }
-  scope :by_position, ->(point) { where(lng: point.lng, lat: point.lat) }
+  scope :by_position, ->(point) { where(lng: round(point.lng), lat: round(point.lat)) }
 
   def address=(value)
     self[:address] = self.class.normalize value
   end
 
   def lng=(value)
-    self[:lng] = self.class.round value
+    self[:lng] = self.class.round value if value
   end
 
   def lat=(value)
-    self[:lat] = self.class.round value
+    self[:lat] = self.class.round value if value
   end
 
   def self.normalize(value)

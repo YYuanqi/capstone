@@ -80,7 +80,7 @@ RSpec.describe 'Geocoders', type: :request do
         expect(CachedLocation.by_position(search_position).count).to eq(1)
 
         3.times do
-          expect(geocoder_cache.reverse_geocode(search_address)[1].id).to eq(result[1].id)
+          expect(geocoder_cache.reverse_geocode(search_position)[1].id).to eq(result[1].id)
           expect(CachedLocation.by_position(search_position).count).to eq(1)
         end
       end
