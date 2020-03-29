@@ -1,6 +1,6 @@
 class CachedLocation
   include Mongoid::Document
-  include Mongoid::Timestamps
+  include Mongoid::Timestamps::Created
   store_in collection: 'locations'
 
   field :address, type: String

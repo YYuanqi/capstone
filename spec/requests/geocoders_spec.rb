@@ -85,5 +85,49 @@ RSpec.describe 'Geocoders', type: :request do
         end
       end
     end
+
+    context 'api' do
+      it 'caches location by address' do
+        jget geocoder_addresses_path, address: search_address
+        expect(response).to have_http_status(:ok)
+        expect(CachedLocation.by_address(search_address).count).to eq(1)
+
+        # with request header
+        3.times do
+          etag = response.headers['ETag']
+          jget geocoder_addresses_path, {address: search_address}, {'If-None-Match' => etag}
+          expect(response).to have_http_status(:not_modified)
+          expect(CachedLocation.by_address(search_address).count).to eq(1)
+        end
+
+        # no request header
+        3.times do
+          jget geocoder_addresses_path, address: search_address
+          expect(response).to have_http_status(:ok)
+          expect(CachedLocation.by_address(search_address).count).to eq(1)
+        end
+      end
+
+      it 'caches location by position' do
+        jget geocoder_positions_path, {lng: position.lng, lat: position.lat}
+        expect(response).to have_http_status(:ok)
+        expect(CachedLocation.by_position(search_position).count).to eq(1)
+
+        # with request header
+        3.times do
+          etag = response.headers['ETag']
+          jget geocoder_positions_path, {lng: position.lng, lat: position.lat}, {'If-None-Match' => etag}
+          expect(response).to have_http_status(:not_modified)
+          expect(CachedLocation.by_position(search_position).count).to eq(1)
+        end
+
+        # no request header
+        3.times do
+          jget geocoder_positions_path, {lng: position.lng, lat: position.lat}
+          expect(response).to have_http_status(:ok)
+          expect(CachedLocation.by_position(search_position).count).to eq(1)
+        end
+      end
+    end
   end
 end
