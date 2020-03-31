@@ -11,7 +11,8 @@ class Image < ApplicationRecord
   composed_of :position,
               class_name: 'Point',
               allow_nil: true,
-              mapping: [%w(lng lng), %w(lat lat)]
+              mapping: [%w(lng lng), %w(lat lat)],
+              converter: Proc.new { |position| Point.new(position[:lng], position[:lat]) if position.is_a? Hash }
 
   acts_as_mappable
 
