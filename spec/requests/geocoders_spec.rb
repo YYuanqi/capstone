@@ -129,5 +129,28 @@ RSpec.describe 'Geocoders', type: :request do
         end
       end
     end
+
+    context 'Image position' do
+      it 'can return Image position' do
+        image = FactoryBot.create(:image)
+        jget image_path(image.id)
+        expect(response).to have_http_status(:ok)
+        payload = parsed_body
+        expect(payload['id']).to eq(image.id)
+        expect(payload['position']).to_not be_nil
+        expect(payload['position'].symbolize_keys).to eq(image.position.to_hash)
+      end
+
+      it 'can set Image position' do
+        login user
+        image_props = FactoryBot.attributes_for(:image)
+        jpost images_path, image_props
+        expect(response).to have_http_status(:created)
+
+        payload = parsed_body
+        expect(payload['position']).to_not be_nil
+        expect(payload['position'].symbolize_keys).to eq(image_props[:position])
+      end
+    end
   end
 end
